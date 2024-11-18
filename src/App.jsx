@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 import "./css/style.css";
 
@@ -11,6 +11,7 @@ import Login from "./components/Login";
 
 function App() {
   const location = useLocation();
+  const [admin, setAdmin] = useState(null);
 
   useEffect(() => {
     document.querySelector("html").style.scrollBehavior = "auto";
@@ -21,8 +22,18 @@ function App() {
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<Dashboard />} />
-        <Route exact path="/login" element={<Login />} />
+        <Route
+          exact
+          path="/"
+          element={
+            !admin ? <Login onLogin={setAdmin} /> : <Navigate to="/dashboard" />
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={admin ? <Dashboard /> : <Navigate to="/" />}
+        />
       </Routes>
     </>
   );

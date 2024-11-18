@@ -10,7 +10,7 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/admin/login",
+        "http://127.0.0.1:8000/api/admin/login",
         {
           email,
           password,
@@ -20,7 +20,16 @@ const Login = ({ onLogin }) => {
       localStorage.setItem("adminToken", response.data.token);
       onLogin(response.data.admin); // Redirect to dashboard
     } catch (err) {
-      setError("Invalid credentials");
+      if (err.response) {
+        // Backend returned a response
+        setError(err.response.data.message || "An error occurred");
+      } else if (err.request) {
+        // Request was made but no response received
+        setError("No response from server. Please check your connection.");
+      } else {
+        // Something else happened
+        setError("An unexpected error occurred.");
+      }
     }
   };
 
