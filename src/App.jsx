@@ -9,6 +9,8 @@ import "./charts/ChartjsConfig";
 import Dashboard from "./pages/Dashboard";
 import Login from "./components/Login";
 
+import MultiStepForm from "./components/MultiStepForm";
+
 function App() {
   const location = useLocation();
   const [admin, setAdmin] = useState(null);
@@ -34,6 +36,7 @@ function App() {
           path="/dashboard"
           element={admin ? <Dashboard /> : <Navigate to="/" />}
         />
+        <Route path="/job-card-service" element={<MultiStepForm />} />
       </Routes>
     </>
   );
