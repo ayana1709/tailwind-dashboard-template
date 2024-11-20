@@ -138,11 +138,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                 •••
               </span>
               <span className="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                Pages
+                SPEED METER TRADING PLC
               </span>
             </h3>
             <ul className="mt-3">
-              {/* Dashboard */}
+              {/*1. Dashboard */}
               <SidebarLinkGroup
                 activecondition={
                   pathname === "/dashboard" || pathname.includes("dashboard")
@@ -169,7 +169,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <div className="flex items-center">
                             <svg
                               className={`shrink-0 fill-current ${
-                                pathname.includes("ecommerce")
+                                pathname.includes("dashboard")
                                   ? "text-violet-500"
                                   : "text-gray-400 dark:text-gray-500"
                               }`}
@@ -178,8 +178,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                               height="16"
                               viewBox="0 0 16 16"
                             >
-                              <path d="M9 6.855A3.502 3.502 0 0 0 8 0a3.5 3.5 0 0 0-1 6.855v1.656L5.534 9.65a3.5 3.5 0 1 0 1.229 1.578L8 10.267l1.238.962a3.5 3.5 0 1 0 1.229-1.578L9 8.511V6.855ZM6.5 3.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm4.803 8.095c.005-.005.01-.01.013-.016l.012-.016a1.5 1.5 0 1 1-.025.032ZM3.5 11c.474 0 .897.22 1.171.563l.013.016.013.017A1.5 1.5 0 1 1 3.5 11Z" />
+                              <path d="M2 1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-6ZM9 3a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V3Zm-7 9a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2Zm7-1a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-3Z" />
                             </svg>
+
                             <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                               Dashboard
                             </span>
@@ -245,7 +246,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <div className="flex items-center">
                             <svg
                               className={`shrink-0 fill-current ${
-                                pathname.includes("ecommerce")
+                                pathname.includes("customer")
                                   ? "text-violet-500"
                                   : "text-gray-400 dark:text-gray-500"
                               }`}
@@ -254,8 +255,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                               height="16"
                               viewBox="0 0 16 16"
                             >
-                              <path d="M9 6.855A3.502 3.502 0 0 0 8 0a3.5 3.5 0 0 0-1 6.855v1.656L5.534 9.65a3.5 3.5 0 1 0 1.229 1.578L8 10.267l1.238.962a3.5 3.5 0 1 0 1.229-1.578L9 8.511V6.855ZM6.5 3.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm4.803 8.095c.005-.005.01-.01.013-.016l.012-.016a1.5 1.5 0 1 1-.025.032ZM3.5 11c.474 0 .897.22 1.171.563l.013.016.013.017A1.5 1.5 0 1 1 3.5 11Z" />
+                              <path d="M8 9a4 4 0 1 0-4-4 4 4 0 0 0 4 4ZM8 10a5 5 0 0 0-5 5 .5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5 5 5 0 0 0-5-5Z" />
                             </svg>
+
                             <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                               Customer
                             </span>
@@ -289,6 +291,636 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                             >
                               <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                                 Job Service Card
+                              </span>
+                            </NavLink>
+                          </li>
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/dashboard"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Service Rmainder
+                              </span>
+                            </NavLink>
+                          </li>
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/dashboard"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                All Cutomers
+                              </span>
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+
+              {/* Vehicles */}
+              <SidebarLinkGroup
+                activecondition={pathname.includes("ecommerce")}
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <a
+                        href="#0"
+                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                          pathname.includes("ecommerce")
+                            ? ""
+                            : "hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleClick();
+                          setSidebarExpanded(true);
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg
+                              className={`shrink-0 fill-current ${
+                                pathname.includes("vehicle")
+                                  ? "text-violet-500"
+                                  : "text-gray-400 dark:text-gray-500"
+                              }`}
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M3 12.5c0-.83.67-1.5 1.5-1.5h15c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5h-.5a2 2 0 1 1-4 0h-7a2 2 0 1 1-4 0h-.5c-.83 0-1.5-.67-1.5-1.5v-5Zm1 0v5h1.25a2 2 0 0 0 3.5 0h8.5a2 2 0 0 0 3.5 0H20v-5h-1l-1-4.5H6L5 12.5H4ZM7.5 7h9l1 4H6.5l1-4Z" />
+                            </svg>
+
+                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              Vehicle
+                            </span>
+                          </div>
+                          {/* Icon */}
+                          <div className="flex shrink-0 ml-2">
+                            <svg
+                              className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${
+                                open && "rotate-180"
+                              }`}
+                              viewBox="0 0 12 12"
+                            >
+                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </a>
+                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                        <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
+                          {/* job service card */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                vehicle Records
+                              </span>
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              {/* Appointment */}
+              <SidebarLinkGroup
+                activecondition={pathname.includes("ecommerce")}
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <a
+                        href="#0"
+                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                          pathname.includes("ecommerce")
+                            ? ""
+                            : "hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleClick();
+                          setSidebarExpanded(true);
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg
+                              className={`shrink-0 fill-current ${
+                                pathname.includes("appointment")
+                                  ? "text-violet-500"
+                                  : "text-gray-400 dark:text-gray-500"
+                              }`}
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M3 4a1 1 0 0 1 1-1h2V2a1 1 0 1 1 2 0v1h8V2a1 1 0 1 1 2 0v1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4Zm1 5v11h16V9H4Zm2 2h3a1 1 0 1 1 0 2H6a1 1 0 1 1 0-2Zm0 4h5a1 1 0 1 1 0 2H6a1 1 0 1 1 0-2Z" />
+                            </svg>
+
+                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              Appontment
+                            </span>
+                          </div>
+                          {/* Icon */}
+                          <div className="flex shrink-0 ml-2">
+                            <svg
+                              className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${
+                                open && "rotate-180"
+                              }`}
+                              viewBox="0 0 12 12"
+                            >
+                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </a>
+                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                        <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
+                          {/* Booking */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Booking
+                              </span>
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              {/* Inventory */}
+              <SidebarLinkGroup
+                activecondition={pathname.includes("ecommerce")}
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <a
+                        href="#0"
+                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                          pathname.includes("ecommerce")
+                            ? ""
+                            : "hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleClick();
+                          setSidebarExpanded(true);
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg
+                              className={`shrink-0 fill-current ${
+                                pathname.includes("inventory")
+                                  ? "text-violet-500"
+                                  : "text-gray-400 dark:text-gray-500"
+                              }`}
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M4 2a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4Zm1 3h14v4H5V5Zm0 6h6v4H5v-4Zm8 0h6v8h-6v-8ZM5 17h6v4H5v-4Z" />
+                            </svg>
+
+                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              Inventory
+                            </span>
+                          </div>
+                          {/* Icon */}
+                          <div className="flex shrink-0 ml-2">
+                            <svg
+                              className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${
+                                open && "rotate-180"
+                              }`}
+                              viewBox="0 0 12 12"
+                            >
+                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </a>
+                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                        <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
+                          {/* spare parts */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Spare Parts
+                              </span>
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              {/* Preforma  */}
+              <SidebarLinkGroup
+                activecondition={pathname.includes("ecommerce")}
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <a
+                        href="#0"
+                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                          pathname.includes("ecommerce")
+                            ? ""
+                            : "hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleClick();
+                          setSidebarExpanded(true);
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg
+                              className={`shrink-0 fill-current ${
+                                pathname.includes("proforma")
+                                  ? "text-violet-500"
+                                  : "text-gray-400 dark:text-gray-500"
+                              }`}
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6Zm7 1.5L18.5 9H13V3.5ZM8 11h6a1 1 0 1 1 0 2H9.5c-.3 0-.5.2-.5.5s.2.5.5.5h2a3 3 0 1 1 0 6h-.5V21a1 1 0 1 1-2 0v-1h-1a1 1 0 1 1 0-2h6.5c.3 0 .5-.2.5-.5s-.2-.5-.5-.5h-2a3 3 0 1 1 0-6H14V9H8a1 1 0 1 1 0-2h6v2H8Z" />
+                            </svg>
+
+                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              Proforma
+                            </span>
+                          </div>
+                          {/* Icon */}
+                          <div className="flex shrink-0 ml-2">
+                            <svg
+                              className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${
+                                open && "rotate-180"
+                              }`}
+                              viewBox="0 0 12 12"
+                            >
+                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </a>
+                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                        <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
+                          {/* manage preforma */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Manage Proforma
+                              </span>
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              {/*  Service and Repair   */}
+              <SidebarLinkGroup
+                activecondition={pathname.includes("ecommerce")}
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <a
+                        href="#0"
+                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                          pathname.includes("ecommerce")
+                            ? ""
+                            : "hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleClick();
+                          setSidebarExpanded(true);
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg
+                              className={`shrink-0 fill-current ${
+                                pathname.includes("work")
+                                  ? "text-violet-500"
+                                  : "text-gray-400 dark:text-gray-500"
+                              }`}
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M20 6h-4V4a2 2 0 0 0-2-2H10a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2ZM10 4h4v2h-4V4Zm6 16H8v-6h8v6ZM6 12h12v2H6v-2Z" />
+                            </svg>
+
+                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              Service and Repair
+                            </span>
+                          </div>
+                          {/* Icon */}
+                          <div className="flex shrink-0 ml-2">
+                            <svg
+                              className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${
+                                open && "rotate-180"
+                              }`}
+                              viewBox="0 0 12 12"
+                            >
+                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </a>
+                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                        <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
+                          {/*  Job Order  */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Job Order
+                              </span>
+                            </NavLink>
+                          </li>
+                          {/*  Work  Order  */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Work Order
+                              </span>
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              {/* Employee  */}
+              <SidebarLinkGroup
+                activecondition={pathname.includes("ecommerce")}
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <a
+                        href="#0"
+                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                          pathname.includes("ecommerce")
+                            ? ""
+                            : "hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleClick();
+                          setSidebarExpanded(true);
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg
+                              className={`shrink-0 fill-current ${
+                                pathname.includes("employee")
+                                  ? "text-violet-500"
+                                  : "text-gray-400 dark:text-gray-500"
+                              }`}
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5Zm-1 7h2a2 2 0 0 1 2 2v8H9V11a2 2 0 0 1 2-2Zm-7 6h4v2H4a2 2 0 0 0-2 2v2h2v-4h2v4h2v-2a2 2 0 0 0-2-2H3Zm13 2v2h2v2h-2v2h4v-6h-4Z" />
+                            </svg>
+
+                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              Employee
+                            </span>
+                          </div>
+                          {/* Icon */}
+                          <div className="flex shrink-0 ml-2">
+                            <svg
+                              className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${
+                                open && "rotate-180"
+                              }`}
+                              viewBox="0 0 12 12"
+                            >
+                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </a>
+                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                        <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
+                          {/* Staff  */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Staff
+                              </span>
+                            </NavLink>
+                          </li>
+                          {/* Timesheet    */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Timesheet
+                              </span>
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              {/* Report   */}
+              <SidebarLinkGroup
+                activecondition={pathname.includes("ecommerce")}
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <a
+                        href="#0"
+                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                          pathname.includes("ecommerce")
+                            ? ""
+                            : "hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleClick();
+                          setSidebarExpanded(true);
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <svg
+                              className={`shrink-0 fill-current ${
+                                pathname.includes("report")
+                                  ? "text-violet-500"
+                                  : "text-gray-400 dark:text-gray-500"
+                              }`}
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2ZM9 17v-4H7v4H5v-6h2v2h2v-2h2v6h-2Zm10 0h-6v-4h2v-2h-4v6h2v4h6v-6Z" />
+                            </svg>
+
+                            <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              Report
+                            </span>
+                          </div>
+                          {/* Icon */}
+                          <div className="flex shrink-0 ml-2">
+                            <svg
+                              className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${
+                                open && "rotate-180"
+                              }`}
+                              viewBox="0 0 12 12"
+                            >
+                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </a>
+                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                        <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
+                          {/* Analysis  */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Analysis
+                              </span>
+                            </NavLink>
+                          </li>
+                          {/* Timesheet    */}
+                          <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/job-card-service"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Invoice Report
                               </span>
                             </NavLink>
                           </li>

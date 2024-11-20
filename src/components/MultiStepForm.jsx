@@ -3,6 +3,7 @@ import CustomerInformation from "./CustomerInformation";
 import ConditionOfVehicle from "./ConditionOfVehicle";
 import TypeOfJob from "./TypeOfJob";
 import CarImageWithForm from "./CarImageWithForm";
+import ReviewStep from "./ReviewStep";
 
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
@@ -15,6 +16,7 @@ const MultiStepForm = () => {
   const [vehicleCondition, setVehicleCondition] = useState({});
   const [typeOfJob, setTypeOfJob] = useState({});
   const [carInspectionData, setCarInspectionData] = useState({});
+  const [reviewStep, setReviewStep] = useState({});
 
   // Handlers for navigation and data updates
   const handleNextFromStep1 = (data) => {
@@ -41,10 +43,30 @@ const MultiStepForm = () => {
   const handleNextFromStep4 = (data) => {
     setCarInspectionData(data); // Save data from Step 4
     console.log("Car Inspection Data:", data);
+    setStep(5);
+    // Proceed to next step or save data
+  };
+
+  const handlePreviousFromStep5 = () => setStep(4);
+  const handleNextFromStep5 = (data) => {
+    setReviewStep(data); // Save data from Step 4
+    console.log("Review Step :", data);
+
     // Proceed to next step or save data
   };
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const labourData = [
+    { label: "Electrical", price: "" },
+    { label: "Service/Repair", price: "" },
+    { label: "Body and Paint", price: "" },
+    { label: "Wash and Grece ", price: "" },
+  ];
+
+  const spareData = [
+    { label: "Fuel Filter", price: "" },
+    { label: "Engine Oil", price: "" },
+  ];
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -82,6 +104,14 @@ const MultiStepForm = () => {
               <CarImageWithForm
                 onPrevious={handlePreviousFromStep4}
                 onNext={handleNextFromStep4}
+              />
+            )}
+            {step === 5 && (
+              <ReviewStep
+                onPrevious={handlePreviousFromStep5}
+                onNext={handleNextFromStep5}
+                initialLabourData={labourData}
+                initialSpareData={spareData}
               />
             )}
           </div>
