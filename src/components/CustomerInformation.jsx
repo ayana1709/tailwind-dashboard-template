@@ -24,12 +24,14 @@ const CustomerInformation = ({ onNext }) => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Customer Information</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        Customer Information/የደንበኛ መረጃ
+      </h2>
       <form>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="customerName" className="block text-sm font-medium">
-              Customer Name
+              Customer Name /የደንበኛ ስም
             </label>
             <input
               type="text"
@@ -42,7 +44,7 @@ const CustomerInformation = ({ onNext }) => {
           </div>
           <div>
             <label htmlFor="telephone" className="block text-sm font-medium">
-              Telephone
+              Telephone/ ስልክ
             </label>
             <input
               type="text"
@@ -55,7 +57,7 @@ const CustomerInformation = ({ onNext }) => {
           </div>
           <div>
             <label htmlFor="carModel" className="block text-sm font-medium">
-              Car Model
+              Car Model/ የመኪና ሞዴል
             </label>
             <input
               type="text"
@@ -68,7 +70,7 @@ const CustomerInformation = ({ onNext }) => {
           </div>
           <div>
             <label htmlFor="tinNo" className="block text-sm font-medium">
-              Tin No
+              Tin No/የቲን ቁጥር
             </label>
             <input
               type="text"
@@ -81,7 +83,7 @@ const CustomerInformation = ({ onNext }) => {
           </div>
           <div>
             <label htmlFor="plateNo" className="block text-sm font-medium">
-              Plate No
+              Plate No/የሰሌዳ ቁጥር
             </label>
             <input
               type="text"
@@ -94,7 +96,7 @@ const CustomerInformation = ({ onNext }) => {
           </div>
           <div>
             <label htmlFor="chassisNo" className="block text-sm font-medium">
-              Chassis No
+              Chassis No/ቻሲስ ቁጥር
             </label>
             <input
               type="text"
@@ -107,7 +109,7 @@ const CustomerInformation = ({ onNext }) => {
           </div>
           <div>
             <label htmlFor="dateIn" className="block text-sm font-medium">
-              Date In
+              Date In/የገባበት ቀን
             </label>
             <input
               type="date"
@@ -120,7 +122,7 @@ const CustomerInformation = ({ onNext }) => {
           </div>
           <div>
             <label htmlFor="km" className="block text-sm font-medium">
-              Km
+              Km/ኪ.ሜ
             </label>
             <input
               type="number"
@@ -136,7 +138,7 @@ const CustomerInformation = ({ onNext }) => {
               htmlFor="priceEstimation"
               className="block text-sm font-medium"
             >
-              Price Estimation (ETB)
+              Price Estimation (ETB)/የዋጋ ግምት (ETB)
             </label>
             <input
               type="number"

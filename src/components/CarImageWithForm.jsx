@@ -30,7 +30,9 @@ const CarImageWithForm = ({ onPrevious, onNext }) => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Car inspection data</h2>
+      <h2 className="text-xl font-bold mb-4">
+        Car inspection data/ የመኪና ፍተሻ መረጃ
+      </h2>
 
       {/* Car Image Section */}
       <div className="mb-6 flex justify-center items-center">
@@ -49,13 +51,13 @@ const CarImageWithForm = ({ onPrevious, onNext }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
             { label: "R Order", name: "rOrder" },
-            { label: "Front", name: "front" },
-            { label: "Rear", name: "rear" },
-            { label: "Left Side", name: "leftSide" },
-            { label: "Right Side", name: "rightSide" },
-            { label: "Door", name: "door" },
-            { label: "Interior", name: "interior" },
-            { label: "Tools", name: "tools" },
+            { label: "Front/ፊት", name: "front" },
+            { label: "Rear/የኋላ", name: "rear" },
+            { label: "Left Side/በግራ በኩል", name: "leftSide" },
+            { label: "Right Side/የቀኝ ጎን", name: "rightSide" },
+            { label: "Door/በር", name: "door" },
+            { label: "Interior/የውስጥ", name: "interior" },
+            { label: "Tools/መሳሪያዎች", name: "tools" },
           ].map(({ label, name }) => (
             <div key={name} className="flex flex-col">
               <label

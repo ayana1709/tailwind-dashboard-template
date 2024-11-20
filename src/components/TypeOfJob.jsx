@@ -27,7 +27,7 @@ const TypeOfJob = ({ onPrevious, onNext }) => {
               htmlFor="customerObservation"
               className="block text-sm font-medium text-gray-700"
             >
-              Customer Observation
+              Customer Observation/የሥራ ዓይነት
             </label>
             <textarea
               id="customerObservation"
@@ -46,7 +46,7 @@ const TypeOfJob = ({ onPrevious, onNext }) => {
               htmlFor="jobToBeDone"
               className="block text-sm font-medium text-gray-700"
             >
-              Job to be Done
+              Job to be Done/መጠናቀቅ ያለበት ሥራ
             </label>
             <textarea
               id="jobToBeDone"
@@ -65,7 +65,7 @@ const TypeOfJob = ({ onPrevious, onNext }) => {
               htmlFor="additionalWork"
               className="block text-sm font-medium text-gray-700"
             >
-              Additional Work
+              Additional Work/ተጨማሪ ሥራ
             </label>
             <textarea
               id="additionalWork"

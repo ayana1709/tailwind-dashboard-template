@@ -2,43 +2,43 @@ import React, { useState } from "react";
 
 const ConditionOfVehicle = ({ onPrevious, onNext }) => {
   const [formData, setFormData] = useState({
-    Fuel: false,
-    WindShieldGlass: false,
-    Battery: false,
-    RadiatorCup: false,
-    EngineOilCup: false,
-    WiperJar: false,
-    Antenna: false,
-    FrontGrill: false,
-    HeadLightLs: false,
-    HeadLightRs: false,
-    ParkingLs: false,
-    ParkingRs: false,
-    DoorGlassFrLs: false,
-    DoorGlassFrRs: false,
-    DoorGlassRrLs: false,
-    DoorGlassRrRs: false,
-    FinderSignalLh: false,
-    FinderSignalRh: false,
-    Astray: false,
-    FloorMat: false,
-    Lighter: false,
-    MirrorViewInside: false,
-    MirrorViewLh: false,
-    MirrorViewRh: false,
-    RadioKnob: false,
-    TapeRecorderCd: false,
-    TailLampLh: false,
-    TailLampRh: false,
-    HubCap: false,
-    SpareWheel: false,
-    Tools: false,
-    Jack: false,
-    FireExtinguisher: false,
-    RrBumper: false,
-    FuelTankCup: false,
-    KeyHolder: false,
-    Tyre: false,
+    "Fuel/ነዳጅ": false,
+    "WindShieldGlass/የንፋስ መከላከያ ብርጭቆ": false,
+    " Battery/ባትሪ": false,
+    "RadiatorCup/የራዲያተር ዋንጫ": false,
+    "EngineOilCup/የሞተር ዘይት ዋንጫ": false,
+    " WiperJar/ዋይፐር ጃር": false,
+    "Antenna/ አንቴና": false,
+    "FrontGrill/የፊት ግሪል": false,
+    "HeadLightLs/የጭንቅላት መብራት ኤል.ኤስ": false,
+    "HeadLightRs/የጭንቅላት መብራት Rs": false,
+    "ParkingLs/የመኪና ማቆሚያ Ls": false,
+    " ParkingRs/የመኪና ማቆሚያ Rs": false,
+    "DoorGlassFrLs/በር ብርጭቆ Fr Ls": false,
+    "DoorGlassFrRs/በር ብርጭቆ Fr Rs": false,
+    "DoorGlassRrLs/በር Glass Rr Ls": false,
+    " DoorGlassRrRs/የበር ብርጭቆ Rs": false,
+    "FinderSignalLh/አግኚው ሲግናል Lh": false,
+    "FinderSignalRh/አግኚው ሲግናል Rh": false,
+    "Astray/ተሳስቷል": false,
+    "FloorMat/የወለል ንጣፍ": false,
+    "Lighter/ቀለሉ": false,
+    "MirrorViewInside/የመስታወት እይታ ከውስጥ": false,
+    "MirrorViewLh/የመስታወት እይታ Lh": false,
+    "MirrorViewRh/የመስታወት እይታ Rh": false,
+    "RadioKnob/የሬዲዮ መቆጣጠሪያ": false,
+    "TapeRecorderCd/የቴፕ መቅጃ ሲዲ": false,
+    "TailLampLh/የጅራት መብራት Lh": false,
+    "TailLampRh/የጅራት መብራት Rh": false,
+    "HubCap/ሃብ ካፕ": false,
+    "SpareWheel/መለዋወጫ ጎማ": false,
+    "Tools/መሳሪያዎች": false,
+    "Jack/ጃክ": false,
+    "FireExtinguisher/የእሳት ማጥፊያ": false,
+    "RrBumper/Rr ባምፐር": false,
+    "FuelTankCup/የነዳጅ ማጠራቀሚያ ዋንጫ": false,
+    "KeyHolder/ቁልፍ ያዥ": false,
+    "Tyre/ጎማ": false,
   });
 
   const handleChange = (e) => {
@@ -52,7 +52,9 @@ const ConditionOfVehicle = ({ onPrevious, onNext }) => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Condition of Vehicle</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        Condition of Vehicle/የተሽከርካሪ ሁኔታ
+      </h2>
       <form>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {Object.keys(formData).map((key) => (

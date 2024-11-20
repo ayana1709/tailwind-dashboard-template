@@ -44,14 +44,16 @@ const ReviewStep = ({
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold mb-4">
-        Final Step: Review and Sign
+        Review and Sign/ይገምግሙ እና ይመዝገቡ
       </h2>
 
       {/* Flex container for tables */}
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Labour Table */}
         <div className="flex-1">
-          <h3 className="text-lg font-medium mb-2">Labour Information</h3>
+          <h3 className="text-lg font-medium mb-2">
+            Labour Information/የሰራተኛ መረጃ
+          </h3>
           <table className="w-full border-collapse border border-gray-300">
             <thead className="bg-gray-100">
               <tr>
@@ -88,7 +90,9 @@ const ReviewStep = ({
 
         {/* Spare Table */}
         <div className="flex-1">
-          <h3 className="text-lg font-medium mb-2">Spare Parts Information</h3>
+          <h3 className="text-lg font-medium mb-2">
+            Spare Parts Information/መለዋወጫዎች መረጃዎች
+          </h3>
           <table className="w-full border-collapse border border-gray-300">
             <thead className="bg-gray-100">
               <tr>
@@ -126,12 +130,14 @@ const ReviewStep = ({
 
       {/* Final Step Inputs */}
       <div className="mt-6">
-        <h3 className="text-lg font-medium mb-4">Final Information</h3>
+        <h3 className="text-lg font-medium mb-4">
+          Final Information/የመጨረሻ መረጃ
+        </h3>
 
         {/* Full Name */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Full Name
+            Full Name/ሙሉ ስም
           </label>
           <input
             type="text"
@@ -145,7 +151,7 @@ const ReviewStep = ({
         {/* Customer's Signature */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Customer's Signature
+            Customer's Signature/የደንበኛው ፊርማ
           </label>
           <input
             type="text"
@@ -159,7 +165,7 @@ const ReviewStep = ({
         {/* Receptionist's Signature */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Receptionist's Signature
+            Receptionist's Signature/የተቀባይ ፊርማ
           </label>
           <input
             type="text"
