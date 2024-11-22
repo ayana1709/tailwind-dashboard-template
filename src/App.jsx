@@ -10,6 +10,8 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./components/Login";
 
 import MultiStepForm from "./components/MultiStepForm";
+import AddCustomer from "./components/AddCustomer";
+import CustomerList from "./components/CustomerList";
 
 function App() {
   const location = useLocation();
@@ -37,6 +39,8 @@ function App() {
           element={admin ? <Dashboard /> : <Navigate to="/" />}
         />
         <Route path="/job-card-service" element={<MultiStepForm />} />
+        <Route path="/customers" element={<AddCustomer />} />
+        <Route path="/list-of-customer" element={<CustomerList />} />
       </Routes>
     </>
   );

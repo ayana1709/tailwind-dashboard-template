@@ -12,61 +12,54 @@ const MultiStepForm = () => {
   const [step, setStep] = useState(1);
 
   // Collecting data for each step
-  const [customerData, setCustomerData] = useState({});
   const [vehicleCondition, setVehicleCondition] = useState({});
   const [typeOfJob, setTypeOfJob] = useState({});
   const [carInspectionData, setCarInspectionData] = useState({});
   const [reviewStep, setReviewStep] = useState({});
 
-  // Handlers for navigation and data updates
-  const handleNextFromStep1 = (data) => {
-    setCustomerData(data); // Save data from Step 1
-    setStep(2); // Move to Step 2
+  // Handler for final submission
+  const handleFinalSubmit = async () => {
+    const finalData = {
+      vehicleCondition,
+      typeOfJob,
+      carInspectionData,
+      reviewStep,
+    };
+
+    try {
+      const response = await fetch("/api/job-card", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(finalData),
+      });
+
+      if (response.ok) {
+        console.log("Form submitted successfully!");
+        // Optionally reset the form or navigate to a success page
+      } else {
+        console.error("Error submitting form:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    }
   };
 
-  const handlePreviousFromStep2 = () => setStep(1);
+  // Navigation Handlers
+  const handleNext = (step, data) => {
+    if (step === 1) setVehicleCondition(data);
+    if (step === 2) setTypeOfJob(data);
+    if (step === 3) setCarInspectionData(data);
 
-  const handleNextFromStep2 = (data) => {
-    setVehicleCondition(data); // Save data from Step 2
-    setStep(3); // Move to Step 3
+    setStep((prevStep) => prevStep + 1);
   };
 
-  const handlePreviousFromStep3 = () => setStep(2);
-
-  const handleNextFromStep3 = (data) => {
-    setTypeOfJob(data); // Save data from Step 3
-    setStep(4); // Move to Step 4
-  };
-
-  const handlePreviousFromStep4 = () => setStep(3);
-
-  const handleNextFromStep4 = (data) => {
-    setCarInspectionData(data); // Save data from Step 4
-    console.log("Car Inspection Data:", data);
-    setStep(5);
-    // Proceed to next step or save data
-  };
-
-  const handlePreviousFromStep5 = () => setStep(4);
-  const handleNextFromStep5 = (data) => {
-    setReviewStep(data); // Save data from Step 4
-    console.log("Review Step :", data);
-
-    // Proceed to next step or save data
+  const handlePrevious = () => {
+    setStep((prevStep) => prevStep - 1);
   };
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const labourData = [
-    { label: "Electrical", price: "" },
-    { label: "Service/Repair", price: "" },
-    { label: "Body and Paint", price: "" },
-    { label: "Wash and Grece ", price: "" },
-  ];
-
-  const spareData = [
-    { label: "Fuel Filter", price: "" },
-    { label: "Engine Oil", price: "" },
-  ];
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -87,31 +80,31 @@ const MultiStepForm = () => {
 
           {/* Form Steps */}
           <div className="min-h-screen bg-gray-100 p-4">
-            {step === 1 && <CustomerInformation onNext={handleNextFromStep1} />}
-            {step === 2 && (
+            {step === 1 && (
               <ConditionOfVehicle
-                onPrevious={handlePreviousFromStep2}
-                onNext={handleNextFromStep2}
+                onNext={(data) => handleNext(1, data)}
+                initialData={vehicleCondition} // Pass saved data for editing
+              />
+            )}
+            {step === 2 && (
+              <TypeOfJob
+                onPrevious={handlePrevious}
+                onNext={(data) => handleNext(2, data)}
+                initialData={typeOfJob} // Pass saved data for editing
               />
             )}
             {step === 3 && (
-              <TypeOfJob
-                onPrevious={handlePreviousFromStep3}
-                onNext={handleNextFromStep3}
+              <CarImageWithForm
+                onPrevious={handlePrevious}
+                onNext={(data) => handleNext(3, data)}
+                initialData={carInspectionData} // Pass saved data for editing
               />
             )}
             {step === 4 && (
-              <CarImageWithForm
-                onPrevious={handlePreviousFromStep4}
-                onNext={handleNextFromStep4}
-              />
-            )}
-            {step === 5 && (
               <ReviewStep
-                onPrevious={handlePreviousFromStep5}
-                onNext={handleNextFromStep5}
-                initialLabourData={labourData}
-                initialSpareData={spareData}
+                onPrevious={handlePrevious}
+                onNext={handleFinalSubmit} // Final submission
+                initialData={reviewStep} // Pass saved data for editing
               />
             )}
           </div>

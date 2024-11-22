@@ -133,6 +133,31 @@ const ReviewStep = ({
         <h3 className="text-lg font-medium mb-4">
           Final Information/የመጨረሻ መረጃ
         </h3>
+        <div>
+          <label htmlFor="km" className="block text-sm font-medium">
+            Km/ኪ.ሜ
+          </label>
+          <input
+            type="number"
+            id="km"
+            name="km"
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="priceEstimation"
+            className="block text-sm font-medium"
+          >
+            Price Estimation (ETB)/የዋጋ ግምት (ETB)
+          </label>
+          <input
+            type="number"
+            id="priceEstimation"
+            name="priceEstimation"
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
 
         {/* Full Name */}
         <div className="mb-4">
