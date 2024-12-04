@@ -1,18 +1,37 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../api";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
 
-const AddCustomer = () => {
+const EditCustomer = () => {
   const [formData, setFormData] = useState({
     name: "",
     telephone: "",
     car_model: [], // Holds car model objects
   });
-
   const navigate = useNavigate(); // For navigation after submission
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { customerId } = useParams(); // Get customerId from URL params
+
+  useEffect(() => {
+    const fetchCustomerData = async () => {
+      try {
+        const response = await api.get(`/customers/${customerId}`);
+
+        setFormData({
+          name: response.data.name,
+          telephone: response.data.telephone,
+          car_model: response.data.car_model || [], // Ensure car_model is an array
+        });
+      } catch (error) {
+        console.error("Error fetching customer data:", error); // Log the error
+        alert(`Failed to load customer data. Error: ${error.message}`);
+      }
+    };
+
+    fetchCustomerData();
+  }, [customerId]);
 
   // Handle individual input field changes
   const handleChange = (e) => {
@@ -20,14 +39,14 @@ const AddCustomer = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle changes in dynamic array fields
+  // Handle changes in dynamic array fields (cars)
   const handleArrayChange = (arrayName, index, key, value) => {
     const updatedArray = [...formData[arrayName]];
     updatedArray[index][key] = value;
     setFormData((prev) => ({ ...prev, [arrayName]: updatedArray }));
   };
 
-  // Add a new row to the dynamic array
+  // Add a new row to the dynamic array (add new car)
   const handleAddRow = (arrayName) => {
     setFormData((prev) => ({
       ...prev,
@@ -35,7 +54,7 @@ const AddCustomer = () => {
     }));
   };
 
-  // Remove a specific row from the dynamic array
+  // Remove a specific row from the dynamic array (remove car)
   const handleRemoveRow = (arrayName, index) => {
     setFormData((prev) => ({
       ...prev,
@@ -43,16 +62,16 @@ const AddCustomer = () => {
     }));
   };
 
-  // Handle form submission
+  // Handle form submission (update customer)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/customers", formData);
-      alert("Customer added successfully!");
+      await api.put(`/customers/${customerId}`, formData); // PUT request to update
+      alert("Customer updated successfully!");
       navigate("/list-of-customer"); // Navigate back to the customer list page
     } catch (error) {
       console.error(error);
-      alert("Failed to add customer.");
+      alert("Failed to update customer.");
     }
   };
 
@@ -73,7 +92,7 @@ const AddCustomer = () => {
                 className="w-full max-w-lg p-6 bg-white rounded-lg shadow-md"
               >
                 <h2 className="text-2xl font-bold mb-6 text-gray-700 text-center">
-                  Add Customer
+                  Edit Customer
                 </h2>
                 {/* Input fields for name and telephone */}
                 {["name", "telephone"].map((field) => (
@@ -150,7 +169,7 @@ const AddCustomer = () => {
                   type="submit"
                   className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition duration-300"
                 >
-                  Add Customer
+                  Update Customer
                 </button>
               </form>
             </div>
@@ -161,4 +180,4 @@ const AddCustomer = () => {
   );
 };
 
-export default AddCustomer;
+export default EditCustomer;

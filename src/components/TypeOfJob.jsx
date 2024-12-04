@@ -1,27 +1,55 @@
 import React, { useState } from "react";
+import api from "../api";
+import { useNavigate } from "react-router-dom";
 
-const TypeOfJob = ({ onPrevious, onNext }) => {
+const TypeOfJob = () => {
+  // State to track the current step
+  const [currentStep, setCurrentStep] = useState(1);
+
+  // State to hold form data
   const [formData, setFormData] = useState({
     customerObservation: "",
     jobToBeDone: "",
     additionalWork: "",
   });
 
+  // Loading and error states for API calls
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const navigate = useNavigate();
+
+  // Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleNext = () => {
-    onNext(formData);
+  // Handle "Next" button click (Save data and move to the next step)
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.post("/jobs", formData);
+      setSuccess(response.data.message);
+      navigate("/step-3");
+    } catch (err) {
+      console.error(err);
+      setError(
+        err.response?.data?.message || "Failed to register types of jobs."
+      );
+    }
   };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-semibold mb-4">Type of Job</h2>
-      <form>
-        <div className="space-y-4">
-          {/* Customer Observation */}
+
+      <form onSubmit={handleSubmit}>
+        {/* Step 1: Customer Observation */}
+
+        <div>
           <div>
             <label
               htmlFor="customerObservation"
@@ -39,8 +67,9 @@ const TypeOfJob = ({ onPrevious, onNext }) => {
               placeholder="Enter customer observations..."
             />
           </div>
+        </div>
 
-          {/* Job to be Done */}
+        <div>
           <div>
             <label
               htmlFor="jobToBeDone"
@@ -58,8 +87,11 @@ const TypeOfJob = ({ onPrevious, onNext }) => {
               placeholder="Enter the job to be done..."
             />
           </div>
+        </div>
 
-          {/* Additional Work */}
+        {/* Step 3: Additional Work */}
+
+        <div>
           <div>
             <label
               htmlFor="additionalWork"
@@ -79,17 +111,12 @@ const TypeOfJob = ({ onPrevious, onNext }) => {
           </div>
         </div>
 
+        {success && <p className="text-green-500">{success}</p>}
+        {error && <p className="text-red-500">{error}</p>}
+
         <div className="mt-6 flex justify-between">
           <button
-            type="button"
-            onClick={onPrevious}
-            className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
-          >
-            Previous Page
-          </button>
-          <button
-            type="button"
-            onClick={handleNext}
+            type="submit"
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             Next Page

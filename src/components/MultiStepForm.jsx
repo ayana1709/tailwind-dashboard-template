@@ -27,7 +27,7 @@ const MultiStepForm = () => {
     };
 
     try {
-      const response = await fetch("/api/job-card", {
+      const response = await fetch("/job-card", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
