@@ -5,59 +5,86 @@ import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
 
 const JobOrderList = () => {
-  const [jobOrders, setJobOrders] = useState([]); // Holds the job orders data
+  const [jobOrders, setJobOrders] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch job orders from API
   useEffect(() => {
     const fetchJobOrders = async () => {
       try {
-        const response = await api.get("/job-orders"); // Update with your API endpoint
-        setJobOrders(response.data);
+        const response = await api.get("/job-orders");
+        console.log("Response data:", response.data);
+        setJobOrders(response.data.data);
       } catch (error) {
-        console.error("Failed to fetch job orders:", error);
+        console.error("Axios error:", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchJobOrders();
   }, []);
 
-  // Navigate to Edit Page
-  const handleEdit = (id) => {
-    navigate(`/edit-job-order/${id}`);
+  const tableHeaders = [
+    "ID",
+    "Plate Number",
+    "Customer Name",
+    "Ordered Jobs",
+    "Status",
+    "Remark",
+    "Edit",
+    "Percentage",
+    "Print Report",
+    "Action",
+  ];
+
+  const handleAction = (action, id) => {
+    switch (action) {
+      case "edit":
+        navigate(`/edit-job-order/${id}`);
+        break;
+      case "print":
+        alert(`Print report for Job Order ID: ${id}`);
+        break;
+      case "delete":
+        alert(`Perform action on Job Order ID: ${id}`);
+        break;
+      default:
+        console.warn("Unknown action:", action);
+    }
   };
 
-  // Print Report (example placeholder function)
-  const handlePrintReport = (id) => {
-    alert(`Print report for Job Order ID: ${id}`);
-  };
-
-  // Handle Delete or Action
-  const handleAction = (id) => {
-    alert(`Perform action on Job Order ID: ${id}`);
-  };
-
-  // Navigate to Create Job Card Page
   const handleCreateJobCard = () => {
     navigate("/step-1");
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-lg font-semibold">Loading job orders...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-red-500 text-lg font-semibold">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-      {/* Content Area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-        {/* Header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-        {/* Main Content */}
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-6 py-8 w-full max-w-9xl mx-auto">
             <div className="bg-white p-6 rounded-lg shadow">
-              {/* Page Title and Create Button */}
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Job Orders</h2>
                 <button
@@ -67,24 +94,11 @@ const JobOrderList = () => {
                   Create Job Card
                 </button>
               </div>
-
-              {/* Table */}
               <div className="overflow-x-auto">
                 <table className="min-w-full border-collapse border border-gray-200">
                   <thead className="bg-gray-100">
                     <tr>
-                      {[
-                        "ID",
-                        "Plate Number",
-                        "Customer Name",
-                        "Ordered Jobs",
-                        "Status",
-                        "Remark",
-                        "Edit",
-                        "Percentage",
-                        "Print Report",
-                        "Action",
-                      ].map((header) => (
+                      {tableHeaders.map((header) => (
                         <th
                           key={header}
                           className="text-left p-3 border border-gray-200 text-sm font-medium text-gray-700"
@@ -122,7 +136,7 @@ const JobOrderList = () => {
                         </td>
                         <td className="p-3 border border-gray-200">
                           <button
-                            onClick={() => handleEdit(order.id)}
+                            onClick={() => handleAction("edit", order.id)}
                             className="text-blue-500 hover:underline"
                           >
                             Edit
@@ -133,7 +147,7 @@ const JobOrderList = () => {
                         </td>
                         <td className="p-3 border border-gray-200">
                           <button
-                            onClick={() => handlePrintReport(order.id)}
+                            onClick={() => handleAction("print", order.id)}
                             className="text-green-500 hover:underline"
                           >
                             Print
@@ -141,7 +155,7 @@ const JobOrderList = () => {
                         </td>
                         <td className="p-3 border border-gray-200">
                           <button
-                            onClick={() => handleAction(order.id)}
+                            onClick={() => handleAction("delete", order.id)}
                             className="text-red-500 hover:underline"
                           >
                             Action
