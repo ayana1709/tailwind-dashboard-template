@@ -9,16 +9,20 @@ const JobOrderList = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupData, setPopupData] = useState({
+    job_to_be_done: "",
+    customer_observation: "",
+    jobOrder: "",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchJobOrders = async () => {
       try {
         const response = await api.get("/job-orders");
-        console.log("Response data:", response.data);
         setJobOrders(response.data.data);
       } catch (error) {
-        console.error("Axios error:", error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -59,6 +63,19 @@ const JobOrderList = () => {
 
   const handleCreateJobCard = () => {
     navigate("/step-1");
+  };
+
+  const handleJobAction = (job, orderId) => {
+    alert(`Action for Job: ${job}, Order ID: ${orderId}`);
+  };
+
+  const openPopup = (job_to_be_done, customer_observation, jobOrder) => {
+    setPopupData({ job_to_be_done, customer_observation, jobOrder });
+    setPopupVisible(true);
+  };
+
+  const closePopup = () => {
+    setPopupVisible(false);
   };
 
   if (loading) {
@@ -120,19 +137,48 @@ const JobOrderList = () => {
                           {order.id}
                         </td>
                         <td className="p-3 border border-gray-200">
-                          {order.plateNumber}
+                          {order.plate_number}
                         </td>
                         <td className="p-3 border border-gray-200">
-                          {order.customerName}
+                          {order.customer_name}
                         </td>
                         <td className="p-3 border border-gray-200">
-                          {order.orderedJobs}
+                          <ul>
+                            {order.job_order.map((job, index) => (
+                              <li key={index}>{job}</li>
+                            ))}
+                          </ul>
                         </td>
                         <td className="p-3 border border-gray-200">
-                          {order.status}
+                          <ul>
+                            {order.job_order.map((job, index) => (
+                              <li
+                                key={index}
+                                className="flex items-center py-1 gap-2"
+                              >
+                                <button
+                                  onClick={() => handleJobAction(job, order.id)}
+                                  className="bg-blue-900 text-white px-2 py-0 text-xs rounded hover:bg-blue-400"
+                                >
+                                  Add to Work Order
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
                         </td>
                         <td className="p-3 border border-gray-200">
-                          {order.remark}
+                          <button
+                            onClick={() =>
+                              openPopup(
+                                order.job_to_be_done,
+                                order.customer_observation,
+                                order.job_order
+                              )
+                            }
+                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                          >
+                            View Remark
+                          </button>
                         </td>
                         <td className="p-3 border border-gray-200">
                           <button
@@ -170,6 +216,41 @@ const JobOrderList = () => {
           </div>
         </main>
       </div>
+
+      {/* Popup Modal */}
+      {popupVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-2/3">
+            <h2 className="text-lg font-bold mb-4">Job Order Details</h2>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-gray-700">
+                <strong>Job to be done :</strong>
+                <p>{popupData.job_to_be_done}</p>
+              </div>
+              <div className="text-gray-700">
+                <strong>Customer Observation:</strong>
+                <p>{popupData.customer_observation}</p>
+              </div>
+              <div className="text-gray-700">
+                <strong>Job Order:</strong>
+                <ul>
+                  {popupData.jobOrder.map((job, index) => (
+                    <li key={index}>{job}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={closePopup}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
