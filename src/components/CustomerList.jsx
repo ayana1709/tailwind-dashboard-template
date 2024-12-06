@@ -100,8 +100,8 @@ const CustomerList = () => {
 
               {/* Table */}
               <div className="overflow-x-auto">
-                <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow">
-                  <thead className="bg-gray-800 text-white">
+                <table className="min-w-full bg-white border border-gray-600 rounded-lg shadow">
+                  <thead className="bg-gray-500 text-black">
                     <tr>
                       <th className="py-3 px-4 border-b text-left">ID</th>
                       <th className="py-3 px-4 border-b text-left">Name</th>

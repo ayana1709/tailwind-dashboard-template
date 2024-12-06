@@ -13,8 +13,9 @@ const JobOrderList = () => {
   const [popupData, setPopupData] = useState({
     job_to_be_done: "",
     customer_observation: "",
-    jobOrder: "",
+    additional_work: "",
   });
+  const [percentageValues, setPercentageValues] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +23,12 @@ const JobOrderList = () => {
       try {
         const response = await api.get("/job-orders");
         setJobOrders(response.data.data);
+        setPercentageValues(
+          response.data.data.reduce(
+            (acc, order) => ({ ...acc, [order.id]: 0 }),
+            {}
+          )
+        );
       } catch (error) {
         setError(error.message);
       } finally {
@@ -37,12 +44,12 @@ const JobOrderList = () => {
     "Plate Number",
     "Customer Name",
     "Ordered Jobs",
-    "Status",
+    "Actions",
     "Remark",
+    "Progress (%)",
     "Edit",
-    "Percentage",
-    "Print Report",
-    "Action",
+    "Report",
+    "Delete",
   ];
 
   const handleAction = (action, id) => {
@@ -51,10 +58,10 @@ const JobOrderList = () => {
         navigate(`/edit-job-order/${id}`);
         break;
       case "print":
-        alert(`Print report for Job Order ID: ${id}`);
+        alert(`Printing report for Job Order ID: ${id}`);
         break;
       case "delete":
-        alert(`Perform action on Job Order ID: ${id}`);
+        alert(`Deleting Job Order ID: ${id}`);
         break;
       default:
         console.warn("Unknown action:", action);
@@ -69,8 +76,8 @@ const JobOrderList = () => {
     alert(`Action for Job: ${job}, Order ID: ${orderId}`);
   };
 
-  const openPopup = (job_to_be_done, customer_observation, jobOrder) => {
-    setPopupData({ job_to_be_done, customer_observation, jobOrder });
+  const openPopup = (job_to_be_done, customer_observation, additional_work) => {
+    setPopupData({ job_to_be_done, customer_observation, additional_work });
     setPopupVisible(true);
   };
 
@@ -106,19 +113,19 @@ const JobOrderList = () => {
                 <h2 className="text-2xl font-bold">Job Orders</h2>
                 <button
                   onClick={handleCreateJobCard}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                 >
                   Create Job Card
                 </button>
               </div>
               <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse border border-gray-200">
-                  <thead className="bg-gray-100">
+                <table className="min-w-full border-collapse border border-gray-600 rounded-lg shadow">
+                  <thead className="bg-gray-500 text-black">
                     <tr>
                       {tableHeaders.map((header) => (
                         <th
                           key={header}
-                          className="text-left p-3 border border-gray-200 text-sm font-medium text-gray-700"
+                          className="text-left p-3 border border-gray-500 text-sm font-medium text-black"
                         >
                           {header}
                         </th>
@@ -126,12 +133,10 @@ const JobOrderList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {jobOrders.map((order, index) => (
+                    {jobOrders.map((order) => (
                       <tr
                         key={order.id}
-                        className={`${
-                          index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                        } hover:bg-gray-100`}
+                        className="hover:bg-gray-100 odd:bg-gray-50 even:bg-white"
                       >
                         <td className="p-3 border border-gray-200">
                           {order.id}
@@ -145,7 +150,7 @@ const JobOrderList = () => {
                         <td className="p-3 border border-gray-200">
                           <ul>
                             {order.job_order.map((job, index) => (
-                              <li key={index}>{job}</li>
+                              <li key={index}>*{job}</li>
                             ))}
                           </ul>
                         </td>
@@ -172,13 +177,35 @@ const JobOrderList = () => {
                               openPopup(
                                 order.job_to_be_done,
                                 order.customer_observation,
-                                order.job_order
+                                order.additional_work
                               )
                             }
-                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                            className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600"
                           >
                             View Remark
                           </button>
+                        </td>
+                        <td className="p-3 border border-gray-200">
+                          <div className="flex flex-col items-center space-y-2">
+                            <input
+                              type="range"
+                              min="0"
+                              max="100"
+                              value={percentageValues[order.id] || 0}
+                              onChange={(e) =>
+                                setPercentageValues({
+                                  ...percentageValues,
+                                  [order.id]: e.target.value,
+                                })
+                              }
+                              className="w-full h-2 bg-blue-100 rounded-lg transition-colors duration-300 focus:outline-none hover:bg-blue-200"
+                            />
+                            <div className="flex justify-between text-xs w-full">
+                              <span>0%</span>
+                              <span>{percentageValues[order.id] || 0}%</span>
+                              <span>100%</span>
+                            </div>
+                          </div>
                         </td>
                         <td className="p-3 border border-gray-200">
                           <button
@@ -187,9 +214,6 @@ const JobOrderList = () => {
                           >
                             Edit
                           </button>
-                        </td>
-                        <td className="p-3 border border-gray-200">
-                          {order.percentage}%
                         </td>
                         <td className="p-3 border border-gray-200">
                           <button
@@ -204,7 +228,7 @@ const JobOrderList = () => {
                             onClick={() => handleAction("delete", order.id)}
                             className="text-red-500 hover:underline"
                           >
-                            Action
+                            Delete
                           </button>
                         </td>
                       </tr>
@@ -220,11 +244,11 @@ const JobOrderList = () => {
       {/* Popup Modal */}
       {popupVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-2/3">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-2/3 sm:w-3/4 md:w-1/2 lg:w-1/3">
             <h2 className="text-lg font-bold mb-4">Job Order Details</h2>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="text-gray-700">
-                <strong>Job to be done :</strong>
+                <strong>Job to be done:</strong>
                 <p>{popupData.job_to_be_done}</p>
               </div>
               <div className="text-gray-700">
@@ -232,22 +256,16 @@ const JobOrderList = () => {
                 <p>{popupData.customer_observation}</p>
               </div>
               <div className="text-gray-700">
-                <strong>Job Order:</strong>
-                <ul>
-                  {popupData.jobOrder.map((job, index) => (
-                    <li key={index}>{job}</li>
-                  ))}
-                </ul>
+                <strong>Additional Work:</strong>
+                <ul>{popupData.additional_work}</ul>
               </div>
             </div>
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={closePopup}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              >
-                Close
-              </button>
-            </div>
+            <button
+              onClick={closePopup}
+              className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}

@@ -118,7 +118,7 @@ const VehicleRegistration = () => {
     try {
       await api.post("/vehicles", formData);
       setSuccess("Vehicle registered successfully!");
-      setTimeout(() => navigate("/vehicle"), 2000); // Ensure the path is correct
+      setTimeout(() => navigate("/list-of-Vehicle"), 2000); // Ensure the path is correct
     } catch (err) {
       console.error(
         "Error Details:",
