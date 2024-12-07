@@ -67,13 +67,19 @@ const JobOrderList = () => {
         console.warn("Unknown action:", action);
     }
   };
+  const handleJobAction = (job, order) => {
+    // Pass the correct order details (plate number, customer name, and job title)
+    navigate("/add-to-work-order", {
+      state: {
+        plateNumber: order.plate_number, // Ensure `order` has plate_number
+        customerName: order.customer_name, // Ensure `order` has customer_name
+        jobTitle: job,
+      },
+    });
+  };
 
   const handleCreateJobCard = () => {
     navigate("/step-1");
-  };
-
-  const handleJobAction = (job, orderId) => {
-    alert(`Action for Job: ${job}, Order ID: ${orderId}`);
   };
 
   const openPopup = (job_to_be_done, customer_observation, additional_work) => {
@@ -162,7 +168,7 @@ const JobOrderList = () => {
                                 className="flex items-center py-1 gap-2"
                               >
                                 <button
-                                  onClick={() => handleJobAction(job, order.id)}
+                                  onClick={() => handleJobAction(job, order)} // Pass the entire order object
                                   className="bg-blue-900 text-white px-2 py-0 text-xs rounded hover:bg-blue-400"
                                 >
                                   Add to Work Order

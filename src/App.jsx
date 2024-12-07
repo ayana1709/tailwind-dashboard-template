@@ -18,6 +18,9 @@ import VehicleRegistration from "./components/VehicleRegistration";
 import TypeOfJob from "./components/TypeOfJob";
 import EditCustomer from "./components/EditCustomer";
 import JobOrderList from "./components/JobOrderList";
+import EmployeeRegistration from "./components/EmployeeRegistration";
+import EmployeeList from "./components/EmployeeList";
+import AddToWorkOrder from "./components/AddToWorkOrder";
 
 function App() {
   const location = useLocation();
@@ -55,6 +58,10 @@ function App() {
 
         {/* <Route path="/edit-customer/:id" element={<EditCustomer />} /> */}
         <Route path="/edit-customer/:customerId" element={<EditCustomer />} />
+
+        <Route path="/employees" element={<EmployeeRegistration />} />
+        <Route path="/employees-list" element={<EmployeeList />} />
+        <Route path="/add-to-work-order" element={<AddToWorkOrder />} />
       </Routes>
     </>
   );
