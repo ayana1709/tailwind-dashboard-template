@@ -3,12 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
+import Swal from "sweetalert2";
 
 const AddToWorkOrder = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { plateNumber, customerName, jobTitle } = location.state || {};
-  const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [employee_id, setemployee_id] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [employees, setEmployees] = useState([]);
@@ -48,7 +49,6 @@ const AddToWorkOrder = () => {
       ...rows,
       {
         id: rows.length + 1,
-        selectedEmployee: "",
         workDescription: "",
         uom: 1,
         quantity: 1,
@@ -79,7 +79,7 @@ const AddToWorkOrder = () => {
   const handleSubmit = () => {
     if (rows.some((row) => !row.workDescription)) {
       setError(
-        "Please select work description  and provide a work description for all rows."
+        "Please select work description and provide a work description for all rows."
       );
       return;
     }
@@ -87,6 +87,7 @@ const AddToWorkOrder = () => {
     const newWorkOrder = {
       plateNumber,
       customerName,
+      employee_id,
       jobTitle,
       workDetails: rows,
     };
@@ -94,10 +95,25 @@ const AddToWorkOrder = () => {
     api
       .post("/work-orders", newWorkOrder)
       .then(() => {
-        navigate("/job-orders");
+        Swal.fire({
+          title: "Success!",
+          text: "Work order has been successfully saved.",
+          icon: "success",
+          confirmButtonText: "OK",
+          timer: 2000, // Automatically close after 2 seconds
+          showConfirmButton: true, // Show button for manual close
+          allowOutsideClick: false, // Prevent click outside to close
+        }).then(() => {
+          navigate("/list-of-Vehicle");
+        });
       })
       .catch(() => {
-        setError("Failed to save the work order.");
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to save the work order. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       });
   };
 
@@ -159,8 +175,8 @@ const AddToWorkOrder = () => {
                   Select Employee
                 </label>
                 <select
-                  value={selectedEmployee}
-                  onChange={(e) => setSelectedEmployee(e.target.value)}
+                  value={employee_id}
+                  onChange={(e) => setemployee_id(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                 >
                   <option value="">Select Employee</option>

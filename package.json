@@ -22,7 +22,8 @@
     "react-flatpickr": "^3.10.13",
     "react-router-dom": "^6.20.1",
     "react-transition-group": "^4.4.5",
-    "run": "^1.5.0"
+    "run": "^1.5.0",
+    "sweetalert2": "^11.14.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
