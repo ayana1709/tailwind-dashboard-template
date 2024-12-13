@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../api";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
+import LoadingSpinner from "./LoadingSpinner";
+import Loading from "./Loading";
 
 const JobOrderList = () => {
   const [jobOrders, setJobOrders] = useState([]);
@@ -17,6 +19,7 @@ const JobOrderList = () => {
   });
   const [percentageValues, setPercentageValues] = useState({});
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchJobOrders = async () => {
@@ -31,8 +34,8 @@ const JobOrderList = () => {
         );
       } catch (error) {
         setError(error.message);
-      } finally {
-        setLoading(false);
+        // } finally {
+        //   setLoading(false);
       }
     };
 
@@ -91,13 +94,9 @@ const JobOrderList = () => {
     setPopupVisible(false);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-lg font-semibold">Loading job orders...</div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   if (error) {
     return (
@@ -106,6 +105,9 @@ const JobOrderList = () => {
       </div>
     );
   }
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -117,21 +119,33 @@ const JobOrderList = () => {
             <div className="bg-white p-6 rounded-lg shadow">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Job Orders</h2>
-                <button
-                  onClick={handleCreateJobCard}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                >
-                  Create Job Card
-                </button>
+
+                <div className="relative">
+                  <div className="flex items-center gap-4 ml-auto">
+                    <input
+                      type="text"
+                      className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Search..."
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                    />
+                    <button
+                      onClick={handleCreateJobCard}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                    >
+                      Create Job Card
+                    </button>
+                  </div>
+                </div>
               </div>
               <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse border border-gray-600 rounded-lg shadow">
-                  <thead className="bg-gray-500 text-black">
+                <table className="min-w-full border-collapse border border-gray-100 rounded-lg shadow">
+                  <thead className="bg-gray-400 text-black">
                     <tr>
                       {tableHeaders.map((header) => (
                         <th
                           key={header}
-                          className="text-left p-3 border border-gray-500 text-sm font-medium text-black"
+                          className="py-3 px-4 border-b text-left"
                         >
                           {header}
                         </th>

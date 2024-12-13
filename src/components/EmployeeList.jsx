@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { NavLink } from "react-router-dom";
 import api from "../api";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
-import { NavLink } from "react-router-dom";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -23,6 +22,7 @@ const EmployeeList = () => {
 
     fetchEmployees();
   }, []);
+
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -42,7 +42,7 @@ const EmployeeList = () => {
                   </h2>
                 </div>
 
-                {/* Search and Add Customer aligned to the right */}
+                {/* Search and Add Employee */}
                 <div className="flex items-center gap-4 ml-auto">
                   <div className="relative">
                     <input
@@ -52,9 +52,6 @@ const EmployeeList = () => {
                       value={searchTerm}
                       onChange={handleSearchChange}
                     />
-                    <span className="absolute top-1/2 transform -translate-y-1/2 right-3 text-gray-400">
-                      {/* <SearchIcon className="h-5 w-5 text-gray-400" /> */}
-                    </span>
                   </div>
                   <NavLink
                     to="/employees"
@@ -67,7 +64,7 @@ const EmployeeList = () => {
 
               <table className="table-auto w-full border-collapse border border-gray-300">
                 <thead>
-                  <tr className="bg-gray-200">
+                  <tr className="bg-gray-400 text-black">
                     <th className="border border-gray-300 px-4 py-2">ID</th>
                     <th className="border border-gray-300 px-4 py-2">
                       Full Name
@@ -106,11 +103,39 @@ const EmployeeList = () => {
                         <td className="border border-gray-300 px-4 py-2">
                           {employee.address}
                         </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {employee.work_history}
+                        <td className="border border-gray-300 px-4 py-2 text-center">
+                          <button
+                            className="text-blue-500 underline hover:text-blue-700"
+                            onClick={() =>
+                              console.log(
+                                `Viewing work history for ${employee.full_name}`
+                              )
+                            }
+                          >
+                            View
+                          </button>
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-center">
-                          {employee.status}
+                          {employee.status === "Assigned" ? (
+                            <span className="px-2 py-1 bg-green-100 text-green-700 rounded-md">
+                              Assigned
+                            </span>
+                          ) : employee.status === "Free" ? (
+                            <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-md">
+                              Free
+                            </span>
+                          ) : (
+                            <button
+                              className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                              onClick={() =>
+                                console.log(
+                                  `Updating status for ${employee.full_name}`
+                                )
+                              }
+                            >
+                              Working
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))

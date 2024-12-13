@@ -144,7 +144,7 @@ const VehicleRegistration = () => {
           <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
               <h2 className="text-2xl font-bold mb-6 text-center">
-                Vehicle Registration
+                Vehicle Registration/ተሽከርካሪ መዝግብ
               </h2>
 
               {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -154,7 +154,7 @@ const VehicleRegistration = () => {
                 {/* Customer Selection */}
                 <div className="mb-6">
                   <label htmlFor="customer_id" className="block text-gray-700">
-                    Customer
+                    Customer/ደንበኛ
                   </label>
                   <select
                     name="customer_id"
@@ -177,7 +177,7 @@ const VehicleRegistration = () => {
                 {/* Plate Number Selection */}
                 <div className="mb-6">
                   <label htmlFor="plate_number" className="block text-gray-700">
-                    Plate Number
+                    Plate Number/ታርጋ ቁጥር
                   </label>
                   <select
                     name="plate_number"
@@ -200,7 +200,7 @@ const VehicleRegistration = () => {
                     htmlFor="chasis_number"
                     className="block text-gray-700"
                   >
-                    Chasis Number
+                    Chasis Number/የቻሲ ቁጥር
                   </label>
                   <input
                     type="text"
@@ -216,7 +216,7 @@ const VehicleRegistration = () => {
                 {/* Tin Number */}
                 <div className="mb-6">
                   <label htmlFor="tin_number" className="block text-gray-700">
-                    Tin Number
+                    Tin Number/ቲን ቁጥር
                   </label>
                   <input
                     type="text"
@@ -232,7 +232,7 @@ const VehicleRegistration = () => {
                 {/* Date In  */}
                 <div className="mb-6">
                   <label htmlFor="date_in" className="block text-gray-700">
-                    Date In
+                    Date In/የገባበት ቀን
                   </label>
                   <input
                     type="date"
@@ -250,7 +250,7 @@ const VehicleRegistration = () => {
                     htmlFor="promised_date"
                     className="block text-gray-700"
                   >
-                    Promised Date
+                    Promised Date/የሚያልቅበት ቀን
                   </label>
                   <input
                     type="date"
@@ -265,7 +265,7 @@ const VehicleRegistration = () => {
                 {/* KM */}
                 <div className="mb-6">
                   <label htmlFor="km" className="block text-gray-700">
-                    Kilometer Reading (KM)
+                    Kilometer Reading (KM)/ኪሎሜትር
                   </label>
                   <input
                     type="number"
@@ -280,7 +280,9 @@ const VehicleRegistration = () => {
                 </div>
                 {/* Job Orders */}
                 <div className="mb-6">
-                  <label className="block text-gray-700">Job Order</label>
+                  <label className="block text-gray-700">
+                    Job Order/የ ስራ ትዛዝ
+                  </label>
                   <div className="flex flex-wrap gap-4">
                     {["Inspection", "Repair", "Maintenance"].map((job) => (
                       <label key={job} className="flex items-center space-x-2">
@@ -304,7 +306,7 @@ const VehicleRegistration = () => {
                     htmlFor="job_to_be_done"
                     className="block text-gray-700"
                   >
-                    Job to be done
+                    Job to be done/ማለቅ ያለበት ቀን
                   </label>
                   <textarea
                     id="job_to_be_done"
@@ -320,7 +322,7 @@ const VehicleRegistration = () => {
                     htmlFor="customer_observation"
                     className="block text-gray-700"
                   >
-                    Customer Observation
+                    Customer Observation/የ ደንበኛ እይታ
                   </label>
                   <textarea
                     id="customer_observation"
@@ -336,7 +338,7 @@ const VehicleRegistration = () => {
                     htmlFor="additional_work"
                     className="block text-gray-700"
                   >
-                    Additional Work
+                    Additional Work/ተጨማሪ ስራ
                   </label>
                   <textarea
                     id="additional_work"
@@ -349,7 +351,7 @@ const VehicleRegistration = () => {
                 {/* Vehicle Conditions */}
                 <div className="mb-6">
                   <label className="block text-gray-700">
-                    Vehicle Conditions
+                    Vehicle Conditions/የተሽከርካሪ ሁኔታ
                   </label>
                   <div className="flex flex-wrap gap-4">
                     {["Good", "Average", "Poor"].map((condition) => (
@@ -423,7 +425,7 @@ const VehicleRegistration = () => {
                     onClick={() => handleAddRow("labourData")}
                     className="text-blue-500"
                   >
-                    Add Labour
+                    Add Labour/ሰራተኛ ጨምር
                   </button>
                 </div>
                 {/* Spare  Data */}
@@ -473,12 +475,12 @@ const VehicleRegistration = () => {
                     onClick={() => handleAddRow("spareData")}
                     className="text-blue-500"
                   >
-                    Add Spare
+                    Add Spare/መለዋወጫ ጨምር
                   </button>
                 </div>
                 {/* Out Source  */}
                 <div className="mb-6">
-                  <h3 className="font-semibold">OutSource</h3>
+                  <h3 className="font-semibold">OutSource/የዉጪ ምንጭ</h3>
                   {formData.outsource.map((outsource, index) => (
                     <div key={index} className="flex items-center gap-4 mb-4">
                       <input
@@ -523,7 +525,7 @@ const VehicleRegistration = () => {
                     onClick={() => handleAddRow("outsource")}
                     className="text-blue-500"
                   >
-                    Add Outsource
+                    Add Outsource/የዉጪ ምንጭ ጨምር
                   </button>
                 </div>
                 {/* Lubricant */}
@@ -573,7 +575,7 @@ const VehicleRegistration = () => {
                     onClick={() => handleAddRow("lubricant")}
                     className="text-blue-500"
                   >
-                    Add Lubricant
+                    Add Lubricant/ዘይት ጨምር
                   </button>
                 </div>
                 {/* Price Estimation */}
@@ -582,7 +584,7 @@ const VehicleRegistration = () => {
                     htmlFor="price_estimation"
                     className="block text-gray-700"
                   >
-                    Price Estimation
+                    Price Estimation/የዋጋ ግምት
                   </label>
                   <input
                     type="number"
@@ -597,7 +599,7 @@ const VehicleRegistration = () => {
                 {/* Recieved By */}
                 <div className="mb-6">
                   <label htmlFor="recieved_by" className="block text-gray-700">
-                    Recieved By
+                    Recieved By/ተቀባይ
                   </label>
                   <input
                     type="text"
@@ -615,7 +617,7 @@ const VehicleRegistration = () => {
                     type="submit"
                     className="bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600"
                   >
-                    Register Vehicle
+                    Register Vehicle/ተሽከርካሪ መዝግብ
                   </button>
                 </div>
               </form>

@@ -3,12 +3,13 @@ import api from "../api";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
 import { NavLink } from "react-router-dom";
-// import { SearchIcon } from "@heroicons/react/outline"; // Import search icon from Heroicons
+import Loading from "./Loading";
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -18,6 +19,8 @@ const CustomerList = () => {
       } catch (err) {
         console.error("Error fetching customers:", err);
         setCustomers([]);
+        // } finally {
+        //   setLoading(false);
       }
     };
 
@@ -53,6 +56,9 @@ const CustomerList = () => {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -85,9 +91,6 @@ const CustomerList = () => {
                       value={searchTerm}
                       onChange={handleSearchChange}
                     />
-                    <span className="absolute top-1/2 transform -translate-y-1/2 right-3 text-gray-400">
-                      {/* <SearchIcon className="h-5 w-5 text-gray-400" /> */}
-                    </span>
                   </div>
                   <NavLink
                     to="/customers"
@@ -100,8 +103,8 @@ const CustomerList = () => {
 
               {/* Table */}
               <div className="overflow-x-auto">
-                <table className="min-w-full bg-white border border-gray-600 rounded-lg shadow">
-                  <thead className="bg-gray-500 text-black">
+                <table className="min-w-full bg-white border border-gray-100 rounded-lg shadow">
+                  <thead className="bg-gray-400 text-black">
                     <tr>
                       <th className="py-3 px-4 border-b text-left">ID</th>
                       <th className="py-3 px-4 border-b text-left">Name</th>
@@ -114,13 +117,17 @@ const CustomerList = () => {
                       <th className="py-3 px-4 border-b text-left">
                         Plate Number
                       </th>
-                      <th className="py-3 px-4 border-b text-left">Edit</th>
                       <th className="py-3 px-4 border-b text-left">
                         Car Status
                       </th>
                       <th className="py-3 px-4 border-b text-left">
                         Payment Status
                       </th>
+                      <th className="py-3 px-4 border-b text-left">Edit</th>
+                      <th className="py-3 px-4 border-b text-left">
+                        Report
+                      </th>{" "}
+                      {/* New column for Print Report */}
                     </tr>
                   </thead>
                   <tbody>
@@ -163,14 +170,6 @@ const CustomerList = () => {
                             <td className="py-3 px-4 border-b">
                               {car.plate_no}
                             </td>
-                            <td className="py-3 px-4 border-b">
-                              <NavLink
-                                to={`/edit-customer/${customer.id}`}
-                                className="px-3 py-1 text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                              >
-                                Edit
-                              </NavLink>
-                            </td>
 
                             <td
                               className={`py-3 px-4 border-b rounded ${getStatusClass(
@@ -193,6 +192,29 @@ const CustomerList = () => {
                                 <option value="Half Paid">Half Paid</option>
                                 <option value="Paid">Paid</option>
                               </select>
+                            </td>
+                            <td className="py-3 px-4 border-b">
+                              <NavLink
+                                to={`/edit-customer/${customer.id}`}
+                                className="px-3 py-1 text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                              >
+                                Edit
+                              </NavLink>
+                            </td>
+
+                            {/* Print Report Button */}
+                            {/* <td className="py-3 px-4 border-b">
+                              
+                            </td> */}
+                            <td className="py-3 px-4 border-b">
+                              <a
+                                href={`/print-report/${customer.id}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-4 py-2 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600"
+                              >
+                                Print
+                              </a>
                             </td>
                           </tr>
                         ))}

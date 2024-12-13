@@ -92,7 +92,7 @@ const EditCustomer = () => {
                 className="w-full max-w-lg p-6 bg-white rounded-lg shadow-md"
               >
                 <h2 className="text-2xl font-bold mb-6 text-gray-700 text-center">
-                  Edit Customer
+                  Edit Customer/ደንበኛ አስተካክል
                 </h2>
                 {/* Input fields for name and telephone */}
                 {["name", "telephone"].map((field) => (
@@ -161,7 +161,7 @@ const EditCustomer = () => {
                     onClick={() => handleAddRow("car_model")}
                     className="text-blue-500"
                   >
-                    Add Car
+                    Add Car/መኪና ጨምር
                   </button>
                 </div>
                 {/* Submit button */}
@@ -169,7 +169,7 @@ const EditCustomer = () => {
                   type="submit"
                   className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition duration-300"
                 >
-                  Update Customer
+                  Update Customer/ደንበኛ ለዉጥ
                 </button>
               </form>
             </div>

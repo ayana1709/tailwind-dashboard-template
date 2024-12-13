@@ -73,10 +73,10 @@ const AddCustomer = () => {
               className="w-full max-w-lg p-6 bg-white rounded-lg shadow-md"
             >
               <h2 className="text-2xl font-bold mb-6 text-gray-700 text-center">
-                Add Customer
+                Add Customer/ደንበኛ ይመዝግቡ
               </h2>
               {/* Input fields for name and telephone */}
-              {["name", "telephone"].map((field) => (
+              {["Full name/ሙሉ ስም", "telephone/ ስልክ"].map((field) => (
                 <div key={field} className="mb-4">
                   <label
                     htmlFor={field}
@@ -97,7 +97,7 @@ const AddCustomer = () => {
               ))}
               {/* Car model dynamic fields */}
               <div className="mb-6">
-                <h3 className="font-semibold">Vehicles</h3>
+                <h3 className="font-semibold">Vehicles/ተሽከርካሪ</h3>
                 {formData.car_model.map((car_model, index) => (
                   <div key={index} className="flex items-center gap-4 mb-4">
                     <input
@@ -142,7 +142,7 @@ const AddCustomer = () => {
                   onClick={() => handleAddRow("car_model")}
                   className="text-blue-500"
                 >
-                  Add Car
+                  Add Car/መኪና መዝግብ
                 </button>
               </div>
               {/* Submit button */}
@@ -150,7 +150,7 @@ const AddCustomer = () => {
                 type="submit"
                 className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition duration-300"
               >
-                Add Customer
+                Add Customer/ደንበኛ መዝግብ
               </button>
             </form>
           </div>

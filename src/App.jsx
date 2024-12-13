@@ -21,6 +21,7 @@ import JobOrderList from "./components/JobOrderList";
 import EmployeeRegistration from "./components/EmployeeRegistration";
 import EmployeeList from "./components/EmployeeList";
 import AddToWorkOrder from "./components/AddToWorkOrder";
+import WorkOrderList from "./components/WorkOrderList";
 
 function App() {
   const location = useLocation();
@@ -42,26 +43,19 @@ function App() {
             !admin ? <Login onLogin={setAdmin} /> : <Navigate to="/dashboard" />
           }
         />
-
-        <Route
-          path="/dashboard"
-          element={admin ? <Dashboard /> : <Navigate to="/" />}
-        />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/job-card-service" element={<MultiStepForm />} />
-
         <Route path="/customers" element={<AddCustomer />} />
         <Route path="/list-of-customer" element={<CustomerList />} />
         <Route path="/list-of-Vehicle" element={<JobOrderList />} />
-
         <Route path="/step-1" element={<VehicleRegistration />} />
         <Route path="/step-2" element={<TypeOfJob />} />
-
         {/* <Route path="/edit-customer/:id" element={<EditCustomer />} /> */}
         <Route path="/edit-customer/:customerId" element={<EditCustomer />} />
-
         <Route path="/employees" element={<EmployeeRegistration />} />
         <Route path="/employees-list" element={<EmployeeList />} />
         <Route path="/add-to-work-order" element={<AddToWorkOrder />} />
+        <Route path="/work-order-list" element={<WorkOrderList />} />
       </Routes>
     </>
   );

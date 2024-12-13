@@ -198,13 +198,15 @@ const AddToWorkOrder = () => {
                 <thead>
                   <tr className="bg-gray-100">
                     <th className="border p-2">No.</th>
-
                     <th className="border p-2">Work Description</th>
                     <th className="border p-2">UOM</th>
                     <th className="border p-2">Quantity</th>
                     <th className="border p-2">Unit Price</th>
                     <th className="border p-2">Total</th>
-                    <th className="border p-2">Estimated Date</th>
+                    {/* <th className="border p-2">Estimated Date</th> */}
+                    <th className="border p-2">Start Date</th>
+                    <th className="border p-2">End Date</th>
+                    <th className="border p-2">Status</th>
                     <th className="border p-2">Actions</th>
                   </tr>
                 </thead>
@@ -212,7 +214,6 @@ const AddToWorkOrder = () => {
                   {rows.map((row) => (
                     <tr key={row.id}>
                       <td className="border p-2 text-center">{row.id}</td>
-
                       <td className="border p-2">
                         <textarea
                           value={row.workDescription}
@@ -258,7 +259,7 @@ const AddToWorkOrder = () => {
                         />
                       </td>
                       <td className="border p-2 text-center">{row.total}</td>
-                      <td className="border p-2">
+                      {/* <td className="border p-2">
                         <input
                           type="date"
                           value={row.estimatedDate}
@@ -271,6 +272,39 @@ const AddToWorkOrder = () => {
                           }
                           className="w-full border rounded px-2 py-1"
                         />
+                      </td> */}
+                      <td className="border p-2">
+                        <input
+                          type="date"
+                          value={row.startDate}
+                          onChange={(e) =>
+                            handleChange(row.id, "startDate", e.target.value)
+                          }
+                          className="w-full border rounded px-2 py-1"
+                        />
+                      </td>
+                      <td className="border p-2">
+                        <input
+                          type="date"
+                          value={row.endDate}
+                          onChange={(e) =>
+                            handleChange(row.id, "endDate", e.target.value)
+                          }
+                          className="w-full border rounded px-2 py-1"
+                        />
+                      </td>
+                      <td className="border p-2">
+                        <select
+                          value={row.status}
+                          onChange={(e) =>
+                            handleChange(row.id, "status", e.target.value)
+                          }
+                          className="w-full border rounded px-2 py-1"
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="In Progress">In Progress</option>
+                          <option value="Completed">Completed</option>
+                        </select>
                       </td>
                       <td className="border p-2 text-center">
                         <button

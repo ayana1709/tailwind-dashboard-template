@@ -55,7 +55,7 @@ const EmployeeRegistration = () => {
               <h2 className="text-xl font-bold mb-4">Employee Registration</h2>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Full Name
+                  Full Name/ሙሉ ስም
                 </label>
                 <input
                   type="text"
@@ -68,7 +68,7 @@ const EmployeeRegistration = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Contact Information
+                  Contact Information/የመገናኛ መረጃ
                 </label>
                 <input
                   type="text"
@@ -81,7 +81,7 @@ const EmployeeRegistration = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Position
+                  Position/ቦታ
                 </label>
                 <input
                   type="text"
@@ -94,7 +94,7 @@ const EmployeeRegistration = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Address
+                  Address/አድራሻ
                 </label>
                 <textarea
                   name="address"
@@ -106,7 +106,7 @@ const EmployeeRegistration = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Gender
+                  Gender/ጾታ
                 </label>
                 <select
                   name="gender"
@@ -125,7 +125,7 @@ const EmployeeRegistration = () => {
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg"
               >
-                Register Employee
+                Register Employee/ሰራተኛ መዝግብ
               </button>
             </form>
           </div>
