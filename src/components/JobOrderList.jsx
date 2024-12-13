@@ -82,7 +82,7 @@ const JobOrderList = () => {
   };
 
   const handleCreateJobCard = () => {
-    navigate("/step-1");
+    navigate("/types-of-jobs");
   };
 
   const openPopup = (job_to_be_done, customer_observation, additional_work) => {

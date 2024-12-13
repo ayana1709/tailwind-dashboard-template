@@ -9,19 +9,20 @@ import "./charts/ChartjsConfig";
 import Dashboard from "./pages/Dashboard";
 import Login from "./components/Login";
 
-import MultiStepForm from "./components/MultiStepForm";
+// import MultiStepForm from "./components/MultiStepForm";
 import AddCustomer from "./components/AddCustomer";
 import CustomerList from "./components/CustomerList";
 import CustomerInformation from "./components/CustomerInformation";
 import ConditionOfVehicle from "./components/ConditionOfVehicle";
 import VehicleRegistration from "./components/VehicleRegistration";
-import TypeOfJob from "./components/TypeOfJob";
+// import TypeOfJob from "./components/TypeOfJob";
 import EditCustomer from "./components/EditCustomer";
 import JobOrderList from "./components/JobOrderList";
 import EmployeeRegistration from "./components/EmployeeRegistration";
 import EmployeeList from "./components/EmployeeList";
 import AddToWorkOrder from "./components/AddToWorkOrder";
 import WorkOrderList from "./components/WorkOrderList";
+import TypesOfJobs from "./components/TypesOfJobs";
 
 function App() {
   const location = useLocation();
@@ -44,18 +45,19 @@ function App() {
           }
         />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/job-card-service" element={<MultiStepForm />} />
+        {/* <Route path="/job-card-service" element={<MultiStepForm />} /> */}
         <Route path="/customers" element={<AddCustomer />} />
         <Route path="/list-of-customer" element={<CustomerList />} />
         <Route path="/list-of-Vehicle" element={<JobOrderList />} />
         <Route path="/step-1" element={<VehicleRegistration />} />
-        <Route path="/step-2" element={<TypeOfJob />} />
+        {/* <Route path="/step-2" element={<TypeOfJob />} /> */}
         {/* <Route path="/edit-customer/:id" element={<EditCustomer />} /> */}
         <Route path="/edit-customer/:customerId" element={<EditCustomer />} />
         <Route path="/employees" element={<EmployeeRegistration />} />
         <Route path="/employees-list" element={<EmployeeList />} />
         <Route path="/add-to-work-order" element={<AddToWorkOrder />} />
         <Route path="/work-order-list" element={<WorkOrderList />} />
+        <Route path="/types-of-jobs" element={<TypesOfJobs />} />
       </Routes>
     </>
   );

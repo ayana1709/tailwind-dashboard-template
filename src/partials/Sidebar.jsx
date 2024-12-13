@@ -470,7 +470,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <div className="flex items-center">
                             <svg
                               className={`shrink-0 fill-current ${
-                                pathname.includes("")
+                                pathname.includes("employee")
                                   ? "text-violet-500"
                                   : "text-gray-400 dark:text-gray-500"
                               }`}
@@ -479,64 +479,45 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                               height="16"
                               viewBox="0 0 24 24"
                             >
-                              <path d="M20 6h-4V4a2 2 0 0 0-2-2H10a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2ZM10 4h4v2h-4V4Zm6 16H8v-6h8v6ZM6 12h12v2H6v-2Z" />
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="4"
+                                fill="currentColor"
+                              />
+                              <path
+                                d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M16.36 16.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M16.36 7.64l1.42-1.42"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                              />
+
+                              <path
+                                d="M15.5 8.5a3 3 0 0 1-4.24-4.24l2.83-2.83a1 1 0 0 1 1.41 0l1.42 1.42a1 1 0 0 1 0 1.41l-2.83 2.83Z"
+                                fill="currentColor"
+                              />
                             </svg>
 
                             <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                              Service and Repair
+                              <NavLink
+                                end
+                                to="/empl"
+                                className={({ isActive }) =>
+                                  "block transition duration-150 truncate " +
+                                  (isActive
+                                    ? "text-violet-500"
+                                    : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                                }
+                              >
+                                <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                  Service And Repair
+                                </span>
+                              </NavLink>
                             </span>
-                          </div>
-                          {/* Icon */}
-                          <div className="flex shrink-0 ml-2">
-                            <svg
-                              className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${
-                                open && "rotate-180"
-                              }`}
-                              viewBox="0 0 12 12"
-                            >
-                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                            </svg>
                           </div>
                         </div>
                       </a>
-                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                        <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
-                          {/*  Job Order  */}
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/job-card-service"
-                              className={({ isActive }) =>
-                                "block transition duration-150 truncate " +
-                                (isActive
-                                  ? "text-violet-500"
-                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Job Order
-                              </span>
-                            </NavLink>
-                          </li>
-                          {/*  Work  Order  */}
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/job-card-service"
-                              className={({ isActive }) =>
-                                "block transition duration-150 truncate " +
-                                (isActive
-                                  ? "text-violet-500"
-                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Work Order
-                              </span>
-                            </NavLink>
-                          </li>
-                        </ul>
-                      </div>
+                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block"></div>
                     </React.Fragment>
                   );
                 }}
