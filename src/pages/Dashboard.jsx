@@ -56,9 +56,10 @@ function Dashboard() {
               {/* Table (Top Channels) */}
               <DashboardCard07 />
               {/* Bar chart (Direct vs Indirect) */}
+              <DashboardCard12 />
               <DashboardCard04 />
               {/* Line chart (Real Time Value) */}
-              <DashboardCard05 />
+              {/* <DashboardCard05 /> */}
               {/* Line chart (Sales Over Time) */}
               {/* <DashboardCard08 /> */}
               {/* Stacked bar chart (Sales VS Refunds) */}
@@ -68,7 +69,6 @@ function Dashboard() {
               {/* Card (Reasons for Refunds) */}
               {/* <DashboardCard11 /> */}
               {/* Card (Recent Activity) */}
-              {/* <DashboardCard12 /> */}
               {/* Card (Income/Expenses) */}
               {/* <DashboardCard13 /> */}
             </div>
