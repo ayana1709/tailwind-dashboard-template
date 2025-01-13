@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios";
-import logo from "./../images/lg.png"; // Replace with the actual path to your logo image
-
+// import axios from "axios";
+import api from "../api";
+import logo from "./../images/lg.png";
 const Login = ({ onLogin }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Change email to username
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,13 +16,9 @@ const Login = ({ onLogin }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/admin/login",
-        { email, password }
-      );
-
+      const response = await api.post("/admin/login", { username, password }); // Update key to username
       localStorage.setItem("adminToken", response.data.token);
-      onLogin(response.data.admin); // Redirect to dashboard
+      onLogin(response.data.admin);
     } catch (err) {
       if (err.response) {
         setError(err.response.data.message || "An error occurred");
@@ -35,7 +33,7 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-teal-400 via-cyan-300 to-blue-400 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 p-4">
       {/* Card Container */}
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden">
         {/* Logo and Header */}
@@ -58,21 +56,21 @@ const Login = ({ onLogin }) => {
             <p className="text-red-600 text-center font-medium">{error}</p>
           )}
 
-          {/* Email Field */}
+          {/* Username Field */}
           <div>
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block text-gray-700 font-semibold"
             >
-              Email Address
+              Username
             </label>
             <input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
+              type="text"
+              id="username"
+              placeholder="Enter your username"
               className="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username} // Change 'email' to 'username'
+              onChange={(e) => setUsername(e.target.value)} // Change to setUsername
               required
             />
           </div>

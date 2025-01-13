@@ -17,6 +17,7 @@
     "build": "^0.1.4",
     "chart.js": "^4.4.1",
     "chartjs-adapter-moment": "^1.0.1",
+    "jspdf": "^2.5.2",
     "moment": "^2.29.4",
     "npm": "^10.9.0",
     "react": "^18.2.0",

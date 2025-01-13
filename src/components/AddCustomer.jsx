@@ -7,8 +7,8 @@ import Header from "../partials/Header";
 const AddCustomer = () => {
   const [formData, setFormData] = useState({
     name: "",
-    telephone: "",
     customerType: "", // Holds the customer type
+    telephone: "",
     carModels: [], // Holds car model objects
   });
 
@@ -46,14 +46,27 @@ const AddCustomer = () => {
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission behavior
+
     try {
+      // Send POST request to the server with form data
       await api.post("/customers", formData);
+
+      // Display success alert to the user
       alert("Customer added successfully!");
-      navigate("/list-of-customer"); // Navigate back to the customer list page
+
+      // Navigate to the customer list page
+      navigate("/types-of-jobs");
     } catch (error) {
-      console.error(error);
-      alert("Failed to add customer.");
+      // Log the error for debugging purposes
+      console.error("Error adding customer:", error);
+
+      // Display a more informative error message to the user
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to add customer. Please try again.";
+
+      alert(errorMessage);
     }
   };
 
@@ -95,24 +108,6 @@ const AddCustomer = () => {
 
             <div className="mb-4">
               <label
-                htmlFor="telephone"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Telephone/ስልክ
-              </label>
-              <input
-                id="telephone"
-                name="telephone"
-                type="text"
-                value={formData.telephone}
-                onChange={handleChange}
-                className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:outline-none"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label
                 htmlFor="customerType"
                 className="block text-sm font-medium text-gray-700"
               >
@@ -130,6 +125,24 @@ const AddCustomer = () => {
                 <option value="regular">Regular</option>
                 <option value="contract">Contract</option>
               </select>
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="telephone"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Telephone/ስልክ
+              </label>
+              <input
+                id="telephone"
+                name="telephone"
+                type="text"
+                value={formData.telephone}
+                onChange={handleChange}
+                className="mt-1 p-2 w-full border rounded-md focus:ring-blue-500 focus:outline-none"
+                required
+              />
             </div>
 
             {/* Car models dynamic fields */}

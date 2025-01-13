@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api";
 import Sidebar from "../partials/Sidebar";
@@ -17,14 +17,11 @@ const AddToWorkOrder = () => {
     {
       id: 1,
       workDescription: "",
-      uom: 1,
-      quantity: 1,
-      unitPrice: 0,
-      total: 0,
-      estimatedDate: "",
+      laborTime: 1, // Lab. Time (replace Quantity)
+      cost: 0, // Cost (Unit Price)
+      total: 0, // Total Cost
       startDate: "",
       endDate: "",
-      remark: "",
       status: "Pending",
     },
   ]);
@@ -49,14 +46,11 @@ const AddToWorkOrder = () => {
       {
         id: rows.length + 1,
         workDescription: "",
-        uom: 1,
-        quantity: 1,
-        unitPrice: 0,
+        laborTime: 1,
+        cost: 0,
         total: 0,
-        estimatedDate: "",
         startDate: "",
         endDate: "",
-        remark: "",
         status: "Pending",
       },
     ]);
@@ -65,7 +59,7 @@ const AddToWorkOrder = () => {
   const handleChange = (id, field, value) => {
     const updatedRows = rows.map((row) =>
       row.id === id
-        ? { ...row, [field]: value, total: row.quantity * row.unitPrice }
+        ? { ...row, [field]: value, total: row.laborTime * row.cost }
         : row
     );
     setRows(updatedRows);
@@ -91,8 +85,11 @@ const AddToWorkOrder = () => {
       workDetails: rows,
     };
 
+    console.log("Work Order Data: ", newWorkOrder); // Check what is being submitted
+
     api
       .post("/work-orders", newWorkOrder)
+
       .then(() => {
         Swal.fire({
           title: "Success!",
@@ -106,7 +103,8 @@ const AddToWorkOrder = () => {
           navigate("/list-of-Vehicle");
         });
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("Error response:", error.response?.data || error.message);
         Swal.fire({
           title: "Error!",
           text: "Failed to save the work order. Please try again.",
@@ -186,6 +184,7 @@ const AddToWorkOrder = () => {
                   ))}
                 </select>
               </div>
+
               <button
                 onClick={addRow}
                 className="mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -198,11 +197,9 @@ const AddToWorkOrder = () => {
                   <tr className="bg-gray-100">
                     <th className="border p-2">No.</th>
                     <th className="border p-2">Work Description</th>
-                    <th className="border p-2">UOM</th>
-                    <th className="border p-2">Quantity</th>
-                    <th className="border p-2">Unit Price</th>
-                    <th className="border p-2">Total</th>
-                    {/* <th className="border p-2">Estimated Date</th> */}
+                    <th className="border p-2">Labor Time</th>
+                    <th className="border p-2">Cost</th>
+                    <th className="border p-2">Total Cost</th>
                     <th className="border p-2">Start Date</th>
                     <th className="border p-2">End Date</th>
                     <th className="border p-2">Status</th>
@@ -230,9 +227,9 @@ const AddToWorkOrder = () => {
                       <td className="border p-2">
                         <input
                           type="number"
-                          value={row.uom}
+                          value={row.laborTime}
                           onChange={(e) =>
-                            handleChange(row.id, "uom", e.target.value)
+                            handleChange(row.id, "laborTime", e.target.value)
                           }
                           className="w-full border rounded px-2 py-1"
                         />
@@ -240,38 +237,14 @@ const AddToWorkOrder = () => {
                       <td className="border p-2">
                         <input
                           type="number"
-                          value={row.quantity}
+                          value={row.cost}
                           onChange={(e) =>
-                            handleChange(row.id, "quantity", e.target.value)
-                          }
-                          className="w-full border rounded px-2 py-1"
-                        />
-                      </td>
-                      <td className="border p-2">
-                        <input
-                          type="number"
-                          value={row.unitPrice}
-                          onChange={(e) =>
-                            handleChange(row.id, "unitPrice", e.target.value)
+                            handleChange(row.id, "cost", e.target.value)
                           }
                           className="w-full border rounded px-2 py-1"
                         />
                       </td>
                       <td className="border p-2 text-center">{row.total}</td>
-                      {/* <td className="border p-2">
-                        <input
-                          type="date"
-                          value={row.estimatedDate}
-                          onChange={(e) =>
-                            handleChange(
-                              row.id,
-                              "estimatedDate",
-                              e.target.value
-                            )
-                          }
-                          className="w-full border rounded px-2 py-1"
-                        />
-                      </td> */}
                       <td className="border p-2">
                         <input
                           type="date"

@@ -23,6 +23,13 @@ import EmployeeList from "./components/EmployeeList";
 import AddToWorkOrder from "./components/AddToWorkOrder";
 import WorkOrderList from "./components/WorkOrderList";
 import TypesOfJobs from "./components/TypesOfJobs";
+import AddBolo from "./components/AddBolo";
+import AddWheelAlignment from "./components/AddWheelAlignment";
+import AddInspection from "./components/AddInspection";
+import BoloList from "./components/BoloList";
+import InspectionList from "./components/InspectionList";
+import WheelAlignemntList from "./components/WheelAlignemntList";
+import VehicleDetails from "./components/VehicleDetails";
 
 function App() {
   const location = useLocation();
@@ -50,14 +57,25 @@ function App() {
         <Route path="/list-of-customer" element={<CustomerList />} />
         <Route path="/list-of-Vehicle" element={<JobOrderList />} />
         <Route path="/step-1" element={<VehicleRegistration />} />
+        <Route path="/vehicle-details" element={<VehicleDetails />} />
         {/* <Route path="/step-2" element={<TypeOfJob />} /> */}
         {/* <Route path="/edit-customer/:id" element={<EditCustomer />} /> */}
-        <Route path="/edit-customer/:customerId" element={<EditCustomer />} />
+        {/* <Route path="/edit-customer/:customerId" element={<EditCustomer />} /> */}
+        <Route path="/edit-customer/:id" element={<EditCustomer />} />
+
         <Route path="/employees" element={<EmployeeRegistration />} />
         <Route path="/employees-list" element={<EmployeeList />} />
         <Route path="/add-to-work-order" element={<AddToWorkOrder />} />
         <Route path="/work-order-list" element={<WorkOrderList />} />
         <Route path="/types-of-jobs" element={<TypesOfJobs />} />
+        <Route path="/bolo" element={<AddBolo />} />
+        <Route path="/bolo-list" element={<BoloList />} />
+
+        <Route path="/inspection" element={<AddInspection />} />
+        <Route path="/inspection-list" element={<InspectionList />} />
+
+        <Route path="/wheel-alignment" element={<AddWheelAlignment />} />
+        <Route path="/wheel-alignment-list" element={<WheelAlignemntList />} />
       </Routes>
     </>
   );

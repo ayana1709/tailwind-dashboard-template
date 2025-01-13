@@ -46,8 +46,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
     localStorage.setItem("sidebar-expanded", sidebarExpanded);
     if (sidebarExpanded) {
       document.querySelector("body").classList.add("sidebar-expanded");
-    } else {
-      document.querySelector("body").classList.remove("sidebar-expanded");
     }
   }, [sidebarExpanded]);
 
@@ -265,7 +263,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                 }}
               </SidebarLinkGroup>
 
-              {/* Vehicles */}
+              {/* Job Order  */}
               <SidebarLinkGroup
                 activecondition={pathname.includes("ecommerce")}
               >
@@ -274,10 +272,10 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                     <React.Fragment>
                       <a
                         href="#0"
-                        className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                        className={`block text-900 dark:text-gray-100 truncate transition duration-150 ${
                           pathname.includes("ecommerce")
                             ? ""
-                            : "hover:text-gray-900 dark:hover:text-white"
+                            : "hover:text-gray-800 dark:hover:text-white"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -298,28 +296,120 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                               height="16"
                               viewBox="0 0 24 24"
                             >
-                              <path d="M3 12.5c0-.83.67-1.5 1.5-1.5h15c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5h-.5a2 2 0 1 1-4 0h-7a2 2 0 1 1-4 0h-.5c-.83 0-1.5-.67-1.5-1.5v-5Zm1 0v5h1.25a2 2 0 0 0 3.5 0h8.5a2 2 0 0 0 3.5 0H20v-5h-1l-1-4.5H6L5 12.5H4ZM7.5 7h9l1 4H6.5l1-4Z" />
+                              <path d="M3 12l1.5-4.5A3 3 0 0 1 7.3 6h9.4a3 3 0 0 1 2.8 1.5L21 12v5a2 2 0 0 1-2 2h-1a2 2 0 1 1-4 0H8a2 2 0 1 1-4 0H3a2 2 0 0 1-2-2v-5ZM5.1 9.2 4 12v3h16v-3l-1.1-2.8a1 1 0 0 0-.9-.6H6a1 1 0 0 0-.9.6ZM6 15a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm12 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z" />
                             </svg>
 
                             <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                              <NavLink
-                                end
-                                to="/list-of-Vehicle"
-                                className={({ isActive }) =>
-                                  "block transition duration-150 truncate " +
-                                  (isActive
-                                    ? "text-violet-500"
-                                    : "text-gray-700/90 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-200")
-                                }
-                              >
-                                <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                  Vehicle
-                                </span>
-                              </NavLink>
+                              Job Order
                             </span>
+                          </div>
+                          {/* Icon */}
+                          <div className="flex shrink-0 ml-2">
+                            <svg
+                              className={`w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 ${
+                                open && "rotate-180"
+                              }`}
+                              viewBox="0 0 12 12"
+                            >
+                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                            </svg>
                           </div>
                         </div>
                       </a>
+                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                        <ul className={`pl-8 mt-1 ${!open && "hidden"}`}>
+                          {/* Create Job Order */}
+                          <li className="mb-1 last:mb-0 relative">
+                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-gray-300 dark:bg-gray-600"></span>
+                            <NavLink
+                              end
+                              to="/types-of-jobs"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate pl-4 " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Create Job Order
+                              </span>
+                            </NavLink>
+                          </li>
+                          {/* Repair */}
+                          <li className="mb-1 last:mb-0 relative">
+                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-gray-300 dark:bg-gray-600"></span>
+                            <NavLink
+                              end
+                              to="/list-of-Vehicle"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate pl-4 " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Repair
+                              </span>
+                            </NavLink>
+                          </li>
+                          {/* Bolo */}
+                          <li className="mb-1 last:mb-0 relative">
+                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-gray-300 dark:bg-gray-600"></span>
+                            <NavLink
+                              end
+                              to="/bolo-list"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate pl-4 " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Bolo
+                              </span>
+                            </NavLink>
+                          </li>
+                          {/* Wheel Alignment */}
+                          <li className="mb-1 last:mb-0 relative">
+                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-gray-300 dark:bg-gray-600"></span>
+                            <NavLink
+                              end
+                              to="/wheel-alignment-list"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate pl-4 " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Wheel Alignment
+                              </span>
+                            </NavLink>
+                          </li>
+                          {/* Inspection */}
+                          <li className="mb-1 last:mb-0 relative">
+                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-gray-300 dark:bg-gray-600"></span>
+                            <NavLink
+                              end
+                              to="/inspection-list"
+                              className={({ isActive }) =>
+                                "block transition duration-150 truncate pl-4 " +
+                                (isActive
+                                  ? "text-violet-500"
+                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                Inspection
+                              </span>
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
                     </React.Fragment>
                   );
                 }}
@@ -447,7 +537,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
               </SidebarLinkGroup>
 
               {/*  Service and Repair   */}
-              <SidebarLinkGroup
+              {/* <SidebarLinkGroup
                 activecondition={pathname.includes("ecommerce")}
               >
                 {(handleClick, open) => {
@@ -501,7 +591,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                             <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                               <NavLink
                                 end
-                                to="/empl"
+                                to="/dashboard"
                                 className={({ isActive }) =>
                                   "block transition duration-150 truncate " +
                                   (isActive
@@ -521,7 +611,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                     </React.Fragment>
                   );
                 }}
-              </SidebarLinkGroup>
+              </SidebarLinkGroup> */}
 
               {/* Request */}
               <SidebarLinkGroup
@@ -582,7 +672,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -661,7 +751,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -678,7 +768,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -757,7 +847,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -836,7 +926,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -915,7 +1005,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -993,7 +1083,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -1071,7 +1161,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -1149,7 +1239,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -1227,7 +1317,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -1305,7 +1395,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -1383,7 +1473,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -1461,7 +1551,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -1539,7 +1629,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive
@@ -1617,7 +1707,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/job-card-service"
+                              to="/dashboard"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate " +
                                 (isActive

@@ -1,70 +1,68 @@
 import React, { useState, useEffect } from "react";
 import jsPDF from "jspdf";
-
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
 import LoadingSpinner from "./LoadingSpinner";
+import Loading from "./Loading";
 import logo from "./../images/aa.png";
 
-const JobOrderList = () => {
-  const [jobOrders, setJobOrders] = useState([]);
+const BoloList = () => {
+  const [bolo, setBolo] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [dropdownVisible, setDropdownVisible] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const [percentageValues, setPercentageValues] = useState({});
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [jobOrders, setJobOrders] = useState([]);
+  const [dropdownVisible, setDropdownVisible] = useState(null);
 
   useEffect(() => {
-    const fetchJobOrders = async () => {
+    const fetchBoloOrders = async () => {
       try {
-        const response = await api.get("/job-orders");
-        setJobOrders(response.data.data);
+        const response = await api.get("/bolo-list");
+        console.log("API Response:", response); // Log the full response object
+        setBolo(response.data || []); // Ensure it defaults to an empty array
       } catch (error) {
+        console.error("Error fetching bolo orders:", error.message);
         setError(error.message);
       } finally {
-        setLoading(false);
+        setLoading(false); // Ensure loading state is updated
       }
     };
 
-    fetchJobOrders();
+    fetchBoloOrders();
   }, []);
 
   const tableHeaders = [
     "ID",
-    "Plate Number",
     "Customer Name",
-    "Ordered Jobs",
-    "Date In",
-    "Date Out",
+    "Plate Number",
+    "Make",
+    "Year",
+    "Body Type",
+    "Result",
+    "Issue Date",
+    "Expiry Date",
+    "Total Payment",
+    "Cheacked by",
+    "Option",
     "Priority",
     "Status",
-    "Option",
-    "Remark",
   ];
-
   const toggleDropdown = (id) => {
     setDropdownVisible((prev) => (prev === id ? null : id));
   };
+  const handleCreateJobCard = () => {
+    navigate("/bolo");
+  };
 
-  const handleJobAction = (job, order) => {
-    // Pass the correct order details (plate number, customer name, and job title)
-    navigate("/add-to-work-order", {
-      state: {
-        plateNumber: order.plate_number, // Ensure `order` has plate_number
-        customerName: order.customer_name, // Ensure `order` has customer_name
-        jobTitle: job,
-      },
-    });
-  };
-  const handleViewClick = (order) => {
-    navigate("/vehicle-details", { state: { order } });
-  };
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  // if (loading) {
+  //   return <Loading />;
+  // }
   // print
   const generatePDF = (order) => {
     const doc = new jsPDF();
@@ -190,7 +188,7 @@ const JobOrderList = () => {
     doc.save(`Job_Order_${order.id}.pdf`);
   };
 
-  // assigning  status and prioprity
+  // asigning  priority and status
   const [statusPopup, setStatusPopup] = useState({
     visible: false,
     orderId: null,
@@ -261,14 +259,6 @@ const JobOrderList = () => {
     Cancelled: "bg-red-500 text-white",
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <loading />
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -276,168 +266,168 @@ const JobOrderList = () => {
       </div>
     );
   }
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
+    <div className="flex h-screen overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="flex flex-col flex-1">
+      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="grow p-4">
-          <div className="bg-white rounded-lg shadow p-6">
-            {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-700">
-                Repair Job Orders
-              </h2>
-              <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
-                  placeholder="Search..."
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
-                <button
-                  onClick={() => navigate("/step-1")}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200 w-full sm:w-auto md:w-fit"
-                >
-                  Create Job Card
-                </button>
-              </div>
-            </div>
+        <main className="grow">
+          <div className="px-4 sm:px-6 lg:px-6 py-8 w-full max-w-9xl mx-auto">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Bolo Job Orders</h2>
 
-            {/* Table Section */}
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead className="bg-gray-300 text-gray-700">
-                  <tr>
-                    {tableHeaders.map((header) => (
-                      <th key={header} className="py-3 px-4 text-left border-b">
-                        {header}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {jobOrders
-                    .filter((order) =>
-                      order.customer_name
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase())
-                    )
-                    .map((order) => (
-                      <tr
-                        key={order.id}
-                        className="hover:bg-gray-100 odd:bg-gray-50 even:bg-white"
-                      >
-                        <td className="py-2 px-4 border">{order.id}</td>
-                        <td className="py-2 px-4 border">
-                          {order.plate_number}
-                        </td>
-                        <td className="py-2 px-4 border">
-                          {order.customer_name}
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <ul>
-                            {order.job_order.map((job, index) => (
-                              <li key={index}>- {job}</li>
-                            ))}
-                          </ul>
-                        </td>
-                        <td className="py-2 px-4 border">{order.date_in}</td>
-                        <td className="py-2 px-4 border">
-                          {order.promised_date}
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <span
-                            className={`px-2 py-1 rounded ${
-                              priorityColors[order.priority]
-                            }`}
-                          >
-                            {order.priority}
-                          </span>
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <span
-                            className={`px-2 py-1 rounded ${
-                              statusColors[order.status]
-                            }`}
-                          >
-                            {order.status}
-                          </span>
-                        </td>
-                        <td className="py-2 px-4 border relative">
-                          <div className="relative inline-block text-left">
-                            <button
-                              onClick={() => toggleDropdown(order.id)}
-                              className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                <div className="relative">
+                  <div className="flex items-center gap-4 ml-auto">
+                    <input
+                      type="text"
+                      className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Search..."
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                    />
+                    <button
+                      onClick={handleCreateJobCard}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                    >
+                      Create Job Card
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full border-collapse border border-gray-100 rounded-lg shadow">
+                  <thead className="bg-gray-400 text-black">
+                    <tr>
+                      {tableHeaders.map((header) => (
+                        <th
+                          key={header}
+                          className="py-3 px-4 border-b text-left"
+                        >
+                          {header}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bolo.length > 0 ? (
+                      bolo.map((order, index) => (
+                        <tr key={order.id} className="hover:bg-gray-100">
+                          <td>{index + 1}</td>
+                          <td>{order.customer_name || "N/A"}</td>
+                          <td>{order.plate_number || "N/A"}</td>
+                          {/* <td>{order.customer_type || "N/A"}</td> */}
+                          <td>{order.make || "N/A"}</td>
+                          <td>{order.year || "N/A"}</td>
+                          <td>{order.body_type || "N/A"}</td>
+                          <td>{order.result || "N/A"}</td>
+                          <td>{order.issue_date || "N/A"}</td>
+                          <td>{order.expiry_date || "N/A"}</td>
+                          {/* <td>{order.tin_number || "N/A"}</td> */}
+                          <td>{order.payment_total || "N/A"}</td>
+                          <td>{order.employee_id || "N/A"}</td>
+
+                          <td className="p-3 border relative">
+                            <div className="relative inline-block text-left">
+                              <button
+                                onClick={() => toggleDropdown(order.id)}
+                                className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                              >
+                                Action
+                              </button>
+                              {dropdownVisible === order.id && (
+                                <ul className="absolute top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg z-50 w-48 overflow-hidden">
+                                  <li>
+                                    <button
+                                      onClick={() => generatePDF(order)}
+                                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    >
+                                      Print job order
+                                    </button>
+                                  </li>
+
+                                  <li>
+                                    <button
+                                      onClick={() =>
+                                        handleJobAction(
+                                          order.job_order[0],
+                                          order
+                                        )
+                                      } // Pass the job and order object
+                                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    >
+                                      Add to Work Order
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                      onClick={() => handleViewClick(order)} // Navigate to the vehicle details page
+                                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    >
+                                      View
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                      onClick={() =>
+                                        handlePriorityChange(order.id)
+                                      }
+                                    >
+                                      Change Priority
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                      onClick={() =>
+                                        handleStatusChange(order.id)
+                                      }
+                                    >
+                                      Change Status
+                                    </button>
+                                  </li>
+                                </ul>
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-2 px-4 border">
+                            <span
+                              className={`px-2 py-1 rounded ${
+                                priorityColors[order.priority]
+                              }`}
                             >
-                              Action
-                            </button>
-                            {dropdownVisible === order.id && (
-                              <ul className="absolute top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg z-50 w-48 overflow-hidden">
-                                <li>
-                                  <button
-                                    onClick={() => generatePDF(order)}
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                  >
-                                    Print job order
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    onClick={() =>
-                                      handleJobAction(order.job_order[0], order)
-                                    }
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                  >
-                                    Add to Work Order
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    onClick={() => handleViewClick(order)}
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                  >
-                                    View
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                    onClick={() =>
-                                      handlePriorityChange(order.id)
-                                    }
-                                  >
-                                    Change Priority
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                    onClick={() => handleStatusChange(order.id)}
-                                  >
-                                    Change Status
-                                  </button>
-                                </li>
-                              </ul>
-                            )}
-                          </div>
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <button
-                            onClick={() =>
-                              alert(`Remark: ${order.job_to_be_done || "None"}`)
-                            }
-                            className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600"
-                          >
-                            View Remark
-                          </button>
+                              {order.priority}
+                            </span>
+                          </td>
+                          <td className="py-2 px-4 border">
+                            <span
+                              className={`px-2 py-1 rounded ${
+                                statusColors[order.status]
+                              }`}
+                            >
+                              {order.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={tableHeaders.length}
+                          className="text-center py-4 text-gray-500"
+                        >
+                          No job orders found.
                         </td>
                       </tr>
-                    ))}
-                </tbody>
-              </table>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </main>
@@ -512,4 +502,4 @@ const JobOrderList = () => {
   );
 };
 
-export default JobOrderList;
+export default BoloList;
