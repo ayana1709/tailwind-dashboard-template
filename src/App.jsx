@@ -30,6 +30,7 @@ import BoloList from "./components/BoloList";
 import InspectionList from "./components/InspectionList";
 import WheelAlignemntList from "./components/WheelAlignemntList";
 import VehicleDetails from "./components/VehicleDetails";
+import RepairRegistrationForm from "./components/RepairRegistrationForm";
 
 function App() {
   const location = useLocation();
@@ -56,7 +57,9 @@ function App() {
         <Route path="/customers" element={<AddCustomer />} />
         <Route path="/list-of-customer" element={<CustomerList />} />
         <Route path="/list-of-Vehicle" element={<JobOrderList />} />
-        <Route path="/step-1" element={<VehicleRegistration />} />
+        {/* <Route path="/step-1" element={<VehicleRegistration />} /> */}
+        <Route path="/step-1" element={<RepairRegistrationForm />} />
+
         <Route path="/vehicle-details" element={<VehicleDetails />} />
         {/* <Route path="/step-2" element={<TypeOfJob />} /> */}
         {/* <Route path="/edit-customer/:id" element={<EditCustomer />} /> */}
