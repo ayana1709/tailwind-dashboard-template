@@ -146,304 +146,138 @@ const AddInspection = () => {
                 Inspection Registration
               </h2>
 
-              {error && <div className="text-red-500 mb-4">{error}</div>}
-              {success && <div className="text-green-500 mb-4">{success}</div>}
+              {/* {error && <div className="text-red-500 mb-4">{error}</div>}
+              {success && <div className="text-green-500 mb-4">{success}</div>} */}
 
               <form onSubmit={handleSubmit}>
                 {/* Customer Selection */}
-                <div className="mb-6">
-                  <label htmlFor="customer_id" className="block text-gray-700">
-                    Customer/ደንበኛ
-                  </label>
-                  <select
-                    name="customer_id"
-                    value={formData.customer_id}
-                    onChange={(e) => {
-                      handleChange(e);
-                      handleCustomerChange(e.target.value); // Load plate numbers
-                    }}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                  >
-                    <option value="">Select Customer</option>
-                    {customers.map((customer) => (
-                      <option key={customer.id} value={customer.id}>
-                        {customer.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* customer Type */}
-                <div className="mb-6">
-                  <label
-                    htmlFor="customer_type"
-                    className="block text-gray-700"
-                  >
-                    Customer Type /ደንበኛ አይነት
-                  </label>
-                  <input
-                    type="text"
-                    id="customer_type"
-                    name="customer_type"
-                    value={formData.customer_type}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter customer type "
-                  />
-                  {/* <select
-                    name="customer"
-                    value={formData.customer_type}
-                    onChange={(e) => {
-                      handleChange(e);
-                      handleCustomerChange(e.target.value);
-                    }}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                  >
-                    <option value="">Select </option>
-                    <option value="contract">Contract </option>
-                    <option value="regular">Regular</option>
-                  </select> */}
-                </div>
+                <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg">
+                  <form>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Left Column */}
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Customer Name
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="የደንበኛው ስም"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Customer Type
+                          </label>
 
-                {/* phone number   */}
-                <div className="mb-6">
-                  <label htmlFor="phone_number" className="block text-gray-700">
-                    Phone Number
-                  </label>
-                  <input
-                    type="text"
-                    id="phone_number"
-                    name="phone_number"
-                    value={formData.phone_number}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter Phone  number "
-                  />
-                </div>
-                {/* tin number  */}
-                <div className="mb-6">
-                  <label htmlFor="tin_number" className="block text-gray-700">
-                    Tin Number
-                  </label>
-                  <input
-                    type="text"
-                    id="tin_number"
-                    name="tin_number"
-                    value={formData.tin_number}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter tin number "
-                  />
-                </div>
+                          <select className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200">
+                            <option>Select Customer</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Phone Number
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="ስልክ ቁጥር"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Tin Number
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="ቲን ቁጥር"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Result
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="ዉጤት"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Total Payment
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="አጠቃላይ ክፍያ"
+                          />
+                        </div>
+                      </div>
 
-                {/* result */}
-                <div className="mb-6">
-                  <label htmlFor="result" className="block text-gray-700">
-                    Result
-                  </label>
-                  <input
-                    type="text"
-                    id="result"
-                    name="result"
-                    value={formData.result}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter a result  "
-                  />
-                </div>
-                {/* payment total*/}
-                <div className="mb-6">
-                  <label
-                    htmlFor="payment_total"
-                    className="block text-gray-700"
-                  >
-                    Payment Total
-                  </label>
-                  <input
-                    type="number"
-                    id="payment_total"
-                    name="payment_total"
-                    value={formData.payment_total}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    placeholder="Enter a total  payment "
-                    required
-                  />
-                </div>
-                {/* proffesional   */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Cheacked by
-                  </label>
-                  <input
-                    type="text"
-                    id="employee_id"
-                    name="employee_id"
-                    value={formData.employee_id}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    placeholder="Enter a professioanl "
-                    required
-                  />
-                  {/* <select
-                    value={employee_id}
-                    onChange={(e) => setemployee_id(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                  >
-                    <option value="">Select proffesional</option>
-                    {employees.map((employee) => (
-                      <option key={employee.id} value={employee.id}>
-                        {employee.full_name}
-                      </option>
-                    ))}
-                  </select> */}
-                </div>
-                {/* Plate Number Selection */}
-                <div className="mb-6">
-                  <label htmlFor="plate_number" className="block text-gray-700">
-                    Plate Number/ታርጋ ቁጥር
-                  </label>
-                  <select
-                    name="plate_number"
-                    value={formData.plate_number}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                  >
-                    <option value="">Select Plate Number</option>
-                    {plateNumbers.map((plate, index) => (
-                      <option key={index} value={plate}>
-                        {plate}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/*make */}
-                <div className="mb-6">
-                  <label htmlFor="make" className="block text-gray-700">
-                    make /አምራች
-                  </label>
-                  <input
-                    type="text"
-                    id="make"
-                    name="make"
-                    value={formData.make}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="Enter make"
-                  />
-                </div>
-                {/*model */}
-                <div className="mb-6">
-                  <label htmlFor="model" className="block text-gray-700">
-                    model
-                  </label>
-                  <input
-                    type="text"
-                    id="model"
-                    name="model"
-                    value={formData.model}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="Enter a model "
-                  />
-                </div>
-                {/* year  */}
-                <div className="mb-6">
-                  <label htmlFor="year" className="block text-gray-700">
-                    Year/ዓ.ም
-                  </label>
-                  <input
-                    type="text"
-                    id="year"
-                    name="year"
-                    value={formData.year}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter a Year"
-                  />
-                </div>
-                {/* Body Type   */}
-                <div className="mb-6">
-                  <label htmlFor="body_type" className="block text-gray-700">
-                    Body Type
-                  </label>
-                  <input
-                    type="text"
-                    id="body_type"
-                    name="body_type"
-                    value={formData.body_type}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter a body type "
-                  />
-                </div>
-                {/* transmission    */}
-                <div className="mb-6">
-                  <label
-                    htmlFor=" transmission"
-                    className="block text-gray-700"
-                  >
-                    Transmission
-                  </label>
-                  <input
-                    type="text"
-                    id="transmission"
-                    name="transmission"
-                    value={formData.transmission}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter a  transmission "
-                  />
-                </div>
-                {/* condition  of vehicle   */}
-                <div className="mb-6">
-                  <label className="block text-gray-700">
-                    Condition of vehicle /የተሽከርካሪ ሁኔታ
-                  </label>
-                  <div className="flex flex-wrap gap-4">
-                    {["New", "Average", "Used", "Damage"].map((condition) => (
-                      <label
-                        key={condition}
-                        className="flex items-center space-x-2"
-                      >
-                        <input
-                          type="checkbox"
-                          value={condition}
-                          checked={formData.vehicle_conditions.includes(
-                            condition
-                          )}
-                          onChange={(e) =>
-                            handleCheckboxChange(
-                              "vehicle_conditions",
-                              e.target.value
-                            )
-                          }
-                          className="h-5 w-5"
-                        />
-                        <span>{condition}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
+                      {/* Right Column */}
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Checked by
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="የባለሙያ ስም"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Plate Number
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="የታርጋ ቁጥር"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Make
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="Enter Make"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Model
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="ሞደል"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-medium text-gray-600 pb-2">
+                            Year
+                          </label>
+                          <input
+                            type="text"
+                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                            placeholder="አመት"
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600"
-                  >
-                    Register
-                  </button>
+                    <div className="col-span-2 text-center">
+                      <button className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-2 rounded-md mt-6 transition duration-300 shadow-md shadow-gray-500/90 focus:shadow-sm">
+                        Submit
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </form>
             </div>

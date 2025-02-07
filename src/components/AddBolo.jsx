@@ -27,10 +27,8 @@ const AddBolo = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [plateNumbers, setPlateNumbers] = useState([]);
-  const [employee_id, setemployee_id] = useState("");
   const [employees, setEmployees] = useState([]);
 
-  // Fetch customers on load
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
@@ -38,335 +36,241 @@ const AddBolo = () => {
         setCustomers(response.data.data || []);
         setLoading(false);
       } catch (err) {
-        console.error(err);
         setError("Failed to fetch customers.");
         setLoading(false);
       }
     };
     fetchCustomers();
   }, []);
+
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
         const response = await api.get("/select-employee");
-        setEmployees(response.data.data); // Access the 'data' array inside the response
+        setEmployees(response.data.data);
       } catch (error) {
         setError("Failed to load employees.");
       }
     };
-
     fetchEmployees();
   }, []);
 
-  const handleCustomerChange = (customerId) => {
-    const selectedCustomer = customers.find(
-      (customer) => customer.id === parseInt(customerId)
-    );
-
-    if (selectedCustomer) {
-      const carModels = Array.isArray(selectedCustomer.carModels)
-        ? selectedCustomer.carModels
-        : []; // Ensure it's an array
-      const plates = carModels.map((car) => car.plateNo);
-      setPlateNumbers(plates);
-    } else {
-      setPlateNumbers([]);
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      customer_id: customerId,
-      plate_number: "",
-    }));
-  };
-
-  // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
-    setSuccess(null); // Clear previous success message
-
+    setError(null);
+    setSuccess(null);
     try {
-      // Attempt to send the form data
-      const response = await api.post("/add-bolo", formData);
-
-      // Set success message and navigate after 2 seconds
+      await api.post("/add-bolo", formData);
       setSuccess("Vehicle registered successfully!");
       setTimeout(() => navigate("/bolo-list"), 2000);
     } catch (err) {
-      console.error("API Error:", err.response?.data || err.message);
-
-      // Check for detailed error message from the server
-      const errorMessage =
-        err.response?.data?.message ||
-        "An unexpected error occurred. Please try again.";
-
-      setError(errorMessage);
+      setError(err.response?.data?.message || "An unexpected error occurred.");
     }
   };
 
-  if (loading)
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
+  if (loading) return <Loading />;
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-      {/* Content Area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-        {/* Site Header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
         <main className="grow">
-          <div className="min-h-screen bg-gray-100 p-6">
-            <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-6 text-center">
-                Bolo Registration
+          <div className="min-h-screen p-6 shadow-lg">
+            <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-4">
+              <h2 className="text-2xl font-bold text-center mb-6">
+                Bolo Registration Form
               </h2>
+              <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Left Column */}
+                <div>
+                  <label className="block font-semibold text-gray-600 text-md pb-1">
+                    Job Card No
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="የካርድ ቁጥር"
+                  />
 
-              {error && <div className="text-red-500 mb-4">{error}</div>}
-              {success && <div className="text-green-500 mb-4">{success}</div>}
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Customer Name
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="የደንበኛው ስም"
+                  />
 
-              <form onSubmit={handleSubmit}>
-                {/* Customer Selection */}
-                <div className="mb-6">
-                  <label htmlFor="customer_id" className="block text-gray-700">
-                    Customer/ደንበኛ
-                  </label>
-                  <select
-                    name="customer_id"
-                    value={formData.customer_id}
-                    onChange={(e) => {
-                      handleChange(e);
-                      handleCustomerChange(e.target.value); // Load plate numbers
-                    }}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                  >
-                    <option value="">Select Customer</option>
-                    {customers.map((customer) => (
-                      <option key={customer.id} value={customer.id}>
-                        {customer.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* customer Type */}
-                <div className="mb-6">
-                  <label
-                    htmlFor="customer_type"
-                    className="block text-gray-700"
-                  >
-                    Customer Type /ደንበኛ አይነት
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Customer Type
                   </label>
                   <input
                     type="text"
-                    id="customer_type"
-                    name="customer_type"
-                    value={formData.customer_type}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter a customer type "
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="የደንበኛው አይነት"
                   />
-                  {/* <select
-                    name="customer"
-                    value={formData.customer_type}
-                    onChange={(e) => {
-                      handleChange(e);
-                      handleCustomerChange(e.target.value);
-                    }}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                  >
-                    <option value="">Select </option>
-                    <option value="contract">Contract </option>
-                    <option value="regular">Regular</option>
-                  </select> */}
-                </div>
-                {/* Plate Number Selection */}
-                <div className="mb-6">
-                  <label htmlFor="plate_number" className="block text-gray-700">
-                    Plate Number/ታርጋ ቁጥር
-                  </label>
-                  <select
-                    name="plate_number"
-                    value={formData.plate_number}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                  >
-                    <option value="">Select Plate Number</option>
-                    {plateNumbers.map((plate, index) => (
-                      <option key={index} value={plate}>
-                        {plate}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/*make */}
-                <div className="mb-6">
-                  <label htmlFor="make" className="block text-gray-700">
-                    make /አምራች
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Mobile
                   </label>
                   <input
                     type="text"
-                    id="make"
-                    name="make"
-                    value={formData.make}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="Enter make"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="የስልክ ቁጥር"
                   />
-                </div>
-                {/* year  */}
-                <div className="mb-6">
-                  <label htmlFor="year" className="block text-gray-700">
-                    Year/ዓ.ም
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    TIN Number
                   </label>
                   <input
                     type="text"
-                    id="year"
-                    name="year"
-                    value={formData.year}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter a Year"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="የቲን ቁጥር"
                   />
-                </div>
-                {/* Body Type   */}
-                <div className="mb-6">
-                  <label htmlFor="body_type" className="block text-gray-700">
-                    Body Type
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Checked Date/የገባበት ቀን
                   </label>
                   <input
-                    type="text"
-                    id="body_type"
-                    name="body_type"
-                    value={formData.body_type}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter a  body type "
+                    type="date"
+                    className="w-full p-2 border-gray-300 rounded-md"
                   />
-                </div>
-                {/* result */}
-                <div className="mb-6">
-                  <label htmlFor="result" className="block text-gray-700">
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Issue Date/ የወጣበት ቀን
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 border-gray-300 rounded-md"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Expiry Date/ የማለቂያ ቀን
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 border-gray-300 rounded-md"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Next Reminding on (B4 15 Days)
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 border-gray-300 rounded-md"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
                     Result
                   </label>
                   <input
                     type="text"
-                    id="result"
-                    name="result"
-                    value={formData.result}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter a result  "
-                  />
-                </div>
-                {/* Issue Date  */}
-                <div className="mb-6">
-                  <label htmlFor="issue_date" className="block text-gray-700">
-                    Issue Date
-                  </label>
-                  <input
-                    type="date"
-                    id="issue_date"
-                    name="issue_date"
-                    value={formData.issue_date}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                  />
-                </div>
-                {/* Expiry Date  */}
-                <div className="mb-6">
-                  <label htmlFor="expiry_date" className="block text-gray-700">
-                    Expiry Date
-                  </label>
-                  <input
-                    type="date"
-                    id="expiry_date"
-                    name="expiry_date"
-                    value={formData.expiry_date}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                  />
-                </div>
-                {/* tin number  */}
-                <div className="mb-6">
-                  <label htmlFor="tin_number" className="block text-gray-700">
-                    Tin Number
-                  </label>
-                  <input
-                    type="text"
-                    id="tin_number"
-                    name="tin_number"
-                    value={formData.tin_number}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    placeholder="enter tin number "
-                  />
-                </div>
-                {/* payment total*/}
-                <div className="mb-6">
-                  <label
-                    htmlFor="payment_total"
-                    className="block text-gray-700"
-                  >
-                    Payment Total
-                  </label>
-                  <input
-                    type="number"
-                    id="payment_total"
-                    name="payment_total"
-                    value={formData.payment_total}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    placeholder="Enter a total  payment "
-                    required
-                  />
-                </div>
-                {/* proffesional   */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Proffesional
-                  </label>
-                  <input
-                    type="text"
-                    id="employee_id"
-                    name="employee_id"
-                    value={formData.employee_id}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    placeholder="Enter a employee "
-                    required
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="ዉጤት"
                   />
                 </div>
 
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600"
-                  >
-                    Register
+                {/* Right Column */}
+                <div>
+                  <label className="block font-semibold text-gray-600 text-md pb-1">
+                    Plate No
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="የታርጋ ቁጥር"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Type (Electric, Hybrid, Fuel, Diesel)
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="የተሽከርካሪ አይነት"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Model
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="ሞዴል"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    VIN
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="ቪን"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Year
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="አምት"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Condition
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="ሁኔታ"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    KM Reading
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="ኪልመትር"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Professional
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="የባለሙያ ስም አስገባ"
+                  />
+
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Checked By
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="ያረጋገጠውን አስገባ"
+                  />
+                  <label className="block font-semibold mt-4 text-gray-600 text-md pb-1">
+                    Total Amount
+                  </label>
+                  <input
+                    type="text"
+                    className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    placeholder="ጠቅላላ ዋጋ"
+                  />
+                </div>
+
+                <div className="col-span-2 text-center">
+                  <button className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-2 rounded-md mt-6 transition duration-300 shadow-md shadow-gray-500/90 focus:shadow-sm">
+                    Submit
                   </button>
                 </div>
               </form>
