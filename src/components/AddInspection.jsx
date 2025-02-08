@@ -7,95 +7,17 @@ import Loading from "./Loading";
 
 const AddInspection = () => {
   const [customers, setCustomers] = useState([]);
-  const [formData, setFormData] = useState({
-    customer_id: "",
-    customer_type: "",
-    phone_number: "",
-    tin_number: "",
-    result: "",
-    payment_total: "",
-    employee_id: "",
-    plate_number: "",
-    make: "",
-    model: "",
-    year: "",
-    body_type: "",
-    transmission: "",
-    vehicle_conditions: [],
-  });
+  const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [plateNumbers, setPlateNumbers] = useState([]);
-  const [employee_id, setemployee_id] = useState("");
-  const [employees, setEmployees] = useState([]);
-
-  // Fetch customers on load
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await api.get("/select-customer");
-        setCustomers(response.data.data || []);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to fetch customers.");
-        setLoading(false);
-      }
-    };
-    fetchCustomers();
-  }, []);
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const response = await api.get("/select-employee");
-        setEmployees(response.data.data); // Access the 'data' array inside the response
-      } catch (error) {
-        setError("Failed to load employees.");
-      }
-    };
-
-    fetchEmployees();
-  }, []);
-
-  const handleCustomerChange = (customerId) => {
-    const selectedCustomer = customers.find(
-      (customer) => customer.id === parseInt(customerId)
-    );
-
-    if (selectedCustomer) {
-      const carModels = Array.isArray(selectedCustomer.carModels)
-        ? selectedCustomer.carModels
-        : []; // Ensure it's an array
-      const plates = carModels.map((car) => car.plateNo);
-      setPlateNumbers(plates);
-    } else {
-      setPlateNumbers([]);
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      customer_id: customerId,
-      plate_number: "",
-    }));
-  };
 
   // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-  // Handle checkbox changes for arrays
-  const handleCheckboxChange = (name, value) => {
-    setFormData((prev) => {
-      const isSelected = prev[name].includes(value);
-      const updatedArray = isSelected
-        ? prev[name].filter((item) => item !== value)
-        : [...prev[name], value];
-      return { ...prev, [name]: updatedArray };
-    });
   };
 
   // Form submission
@@ -122,12 +44,12 @@ const AddInspection = () => {
       setError(errorMessage);
     }
   };
-  if (loading)
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
+  // if (loading)
+  //   return (
+  //     <div>
+  //       <Loading />
+  //     </div>
+  //   );
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -173,6 +95,8 @@ const AddInspection = () => {
 
                           <select className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200">
                             <option>Select Customer</option>
+                            <option value="regular">Regular</option>
+                            <option value="contract">Contract</option>
                           </select>
                         </div>
                         <div>
