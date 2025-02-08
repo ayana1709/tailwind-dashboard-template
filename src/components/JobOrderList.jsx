@@ -1,513 +1,133 @@
 import React, { useState, useEffect } from "react";
-import jsPDF from "jspdf";
-
-import { useNavigate } from "react-router-dom";
 import api from "../api";
-import Sidebar from "../partials/Sidebar";
-import Header from "../partials/Header";
-import LoadingSpinner from "./LoadingSpinner";
-import logo from "./../images/aa.png";
 
 const JobOrderList = () => {
-  const [jobOrders, setJobOrders] = useState([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [dropdownVisible, setDropdownVisible] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
+  const [repairs, setRepairs] = useState([]);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
-    const fetchJobOrders = async () => {
+    const fetchRepairs = async () => {
       try {
-        const response = await api.get("/job-orders");
-        setJobOrders(response.data.data);
+        const response = await api.get("/repairs");
+        setRepairs(Array.isArray(response.data.data) ? response.data.data : []);
       } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching repair registrations:", error);
+        setRepairs([]);
       }
     };
 
-    fetchJobOrders();
+    fetchRepairs();
   }, []);
 
-  const tableHeaders = [
-    "ID",
-    "Plate Number",
-    "Customer Name",
-    "Ordered Jobs",
-    "Date In",
-    "Date Out",
-    "Priority",
-    "Status",
-    "Option",
-    "Remark",
-  ];
-
-  const toggleDropdown = (id) => {
-    setDropdownVisible((prev) => (prev === id ? null : id));
-  };
-
-  const handleJobAction = (job, order) => {
-    // Pass the correct order details (plate number, customer name, and job title)
-    navigate("/add-to-work-order", {
-      state: {
-        plateNumber: order.plate_number, // Ensure `order` has plate_number
-        customerName: order.customer_name, // Ensure `order` has customer_name
-        jobTitle: job,
-      },
-    });
-  };
-  const handleViewClick = (order) => {
-    navigate("/vehicle-details", { state: { order } });
-  };
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-  // print
-  const generatePDF = (order) => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
-
-    // Add Company Logo
-    const logoWidth = 60; // Logo width
-    const logoHeight = 30; // Logo height
-    const logoX = 20; // Align to the left
-    const logoY = 10; // Position at the top
-    doc.addImage(logo, "PNG", logoX, logoY, logoWidth, logoHeight);
-
-    // Adjust Company Name to align closer with the logo
-    const companyNameEnglish = "SPEED MEETER TRADING PLC";
-    const companyNameAmharic = "ስፒድ ሜትር ትሬዲንግ";
-
-    // Slight adjustment to align company name closer to logo
-    const companyNameX = 95; // Adjust this value to bring it closer to the logo
-
-    // Use a font compatible with Amharic
-    doc.setFontSize(14);
-    doc.setFont("helvetica", "bold");
-    doc.text(companyNameEnglish, companyNameX, 20); // Positioning company name closer
-    doc.setFont("Noto Sans Ethiopic", "normal");
-    // doc.text(companyNameAmharic, companyNameX, 30); // Positioning Amharic name closer
-
-    // Add Divider Line
-    doc.setDrawColor(0);
-    doc.setLineWidth(0.5);
-    doc.line(10, 40, pageWidth - 10, 40);
-
-    // Customer Information Section (two columns)
-    const customerInfo = [
-      { label: "Customer Name:", value: order.customer_name },
-      { label: "Plate Number:", value: order.plate_number },
-      { label: "Date In:", value: order.date_in },
-      { label: "Promised Date:", value: order.promised_date },
-      { label: "Priority:", value: order.priority || "N/A" },
-      { label: "Status:", value: order.status || "N/A" },
-      { label: "Remark:", value: order.remark || "None" },
-    ];
-
-    doc.setFontSize(10); // Smaller font for the customer info
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(0);
-
-    let startX = 20;
-    let startY = 50;
-    const colWidth = (pageWidth - 20) / 2; // Divide into 2 columns
-
-    customerInfo.forEach((item, index) => {
-      const columnIndex = index % 2; // Alternate between the two columns
-      const rowIndex = Math.floor(index / 2);
-
-      // Adjusting the text positions for tighter spacing and better alignment
-      doc.text(
-        item.label,
-        startX + columnIndex * colWidth,
-        startY + rowIndex * 12
-      );
-      doc.text(
-        item.value,
-        startX + columnIndex * colWidth + 35,
-        startY + rowIndex * 12
-      ); // Align value next to label
-    });
-    // doc.text("Job Order Report", pageWidth / 2, 50, null, null, "center");
-
-    // Add Divider Line Below Customer Info
-    // doc.setDrawColor(0);
-    // doc.line(
-    //   10,
-    //   startY + Math.ceil(customerInfo.length / 2) * 12 + 5,
-    //   pageWidth - 10,
-    //   startY + Math.ceil(customerInfo.length / 2) * 12 + 5
-    // );
-    // Add Title
-    doc.setFontSize(16);
-    doc.setTextColor(40);
-    doc.setFont("helvetica", "bold");
-
-    // Add Job Order Details Table
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text(
-      "Ordered Jobs:",
-      10,
-      startY + Math.ceil(customerInfo.length / 2) * 12 + 15
-    );
-
-    const tableColumnHeaders = ["#", "Job Description"];
-    const tableRows = order.job_order.map((job, index) => [index + 1, job]);
-
-    const tableStartX = 20;
-    let tableStartY = startY + Math.ceil(customerInfo.length / 2) * 12 + 25;
-
-    // Draw Table Headers
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    tableColumnHeaders.forEach((header, i) => {
-      doc.text(header, tableStartX + i * 20, tableStartY);
-    });
-
-    // Draw Table Rows
-    doc.setFont("helvetica", "normal");
-    tableRows.forEach((row, rowIndex) => {
-      row.forEach((cell, cellIndex) => {
-        doc.text(
-          `${cell}`,
-          tableStartX + cellIndex * 20,
-          tableStartY + 10 + rowIndex * 10
-        );
-      });
-    });
-
-    // Footer Section (Timestamp)
-    const footerY = tableStartY + 20 + tableRows.length * 10;
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text(`Generated on: ${new Date().toLocaleString()}`, 10, footerY);
-
-    // Save the PDF
-    doc.save(`Job_Order_${order.id}.pdf`);
-  };
-
-  // assigning  status and prioprity
-  const [statusPopup, setStatusPopup] = useState({
-    visible: false,
-    orderId: null,
-  });
-  const [selectedStatus, setSelectedStatus] = useState("");
-  const [selectedPriority, setSelectedPriority] = useState("");
-
-  const [priorityPopup, setPriorityPopup] = useState({
-    visible: false,
-    orderId: null,
-  });
-
-  const handlePriorityChange = (orderId) => {
-    setPriorityPopup({ visible: true, orderId });
-  };
-  const handleStatusChange = (orderId) => {
-    setStatusPopup({ visible: true, orderId });
-  };
-
-  const savePriorityChange = () => {
-    if (selectedPriority) {
-      setJobOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.id === priorityPopup.orderId
-            ? { ...order, priority: selectedPriority }
-            : order
-        )
-      );
-      setPriorityPopup({ visible: false, orderId: null });
-      setSelectedPriority("");
-    }
-  };
-  const saveStatusChange = () => {
-    if (selectedStatus) {
-      setJobOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.id === statusPopup.orderId
-            ? { ...order, status: selectedStatus }
-            : order
-        )
-      );
-      setStatusPopup({ visible: false, orderId: null });
-      setSelectedStatus("");
-    }
-  };
-
-  const cancelStatusChange = () => {
-    setStatusPopup({ visible: false, orderId: null });
-    setSelectedStatus("");
-  };
-
-  const cancelPriorityChange = () => {
-    setPriorityPopup({ visible: false, orderId: null });
-    setSelectedPriority("");
-  };
-
-  const priorityColors = {
-    Urgent: "bg-red-500 text-white",
-    High: "bg-yellow-500 text-white",
-    Medium: "bg-blue-500 text-white",
-    Low: "bg-green-500 text-white",
-  };
-  // const = ["Pending", "In Progress", "Completed", "Cancelled"];
-  const statusColors = {
-    Pending: "bg-yellow-500 text-white",
-    In_Progress: "bg-blue-500 text-white",
-    Completed: "bg-green-500 text-white",
-    Cancelled: "bg-red-500 text-white",
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <loading />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-red-500 text-lg font-semibold">{error}</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="flex flex-col flex-1">
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="grow p-4">
-          <div className="bg-white rounded-lg shadow p-6">
-            {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-700">
-                Repair Job Orders
-              </h2>
-              <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
-                  placeholder="Search..."
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
-                <button
-                  onClick={() => navigate("/step-1")}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200 w-full sm:w-auto md:w-fit"
-                >
-                  Create Job Card
-                </button>
-              </div>
-            </div>
-
-            {/* Table Section */}
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead className="bg-gray-300 text-gray-700">
-                  <tr>
-                    {tableHeaders.map((header) => (
-                      <th key={header} className="py-3 px-4 text-left border-b">
-                        {header}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {jobOrders
-                    .filter((order) =>
-                      order.customer_name
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase())
-                    )
-                    .map((order) => (
-                      <tr
-                        key={order.id}
-                        className="hover:bg-gray-100 odd:bg-gray-50 even:bg-white"
-                      >
-                        <td className="py-2 px-4 border">{order.id}</td>
-                        <td className="py-2 px-4 border">
-                          {order.plate_number}
-                        </td>
-                        <td className="py-2 px-4 border">
-                          {order.customer_name}
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <ul>
-                            {order.job_order.map((job, index) => (
-                              <li key={index}>- {job}</li>
-                            ))}
-                          </ul>
-                        </td>
-                        <td className="py-2 px-4 border">{order.date_in}</td>
-                        <td className="py-2 px-4 border">
-                          {order.promised_date}
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <span
-                            className={`px-2 py-1 rounded ${
-                              priorityColors[order.priority]
-                            }`}
-                          >
-                            {order.priority}
-                          </span>
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <span
-                            className={`px-2 py-1 rounded ${
-                              statusColors[order.status]
-                            }`}
-                          >
-                            {order.status}
-                          </span>
-                        </td>
-                        <td className="py-2 px-4 border relative">
-                          <div className="relative inline-block text-left">
-                            <button
-                              onClick={() => toggleDropdown(order.id)}
-                              className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            >
-                              Action
-                            </button>
-                            {dropdownVisible === order.id && (
-                              <ul className="absolute top-10 left-0 bg-white border border-gray-300 rounded-lg shadow-lg z-50 w-48 overflow-hidden">
-                                <li>
-                                  <button
-                                    onClick={() => generatePDF(order)}
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                  >
-                                    Print job order
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    onClick={() =>
-                                      handleJobAction(order.job_order[0], order)
-                                    }
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                  >
-                                    Add to Work Order
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    onClick={() => handleViewClick(order)}
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                  >
-                                    View
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                    onClick={() =>
-                                      handlePriorityChange(order.id)
-                                    }
-                                  >
-                                    Change Priority
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                    onClick={() => handleStatusChange(order.id)}
-                                  >
-                                    Change Status
-                                  </button>
-                                </li>
-                              </ul>
-                            )}
-                          </div>
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <button
-                            onClick={() =>
-                              alert(`Remark: ${order.job_to_be_done || "None"}`)
-                            }
-                            className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600"
-                          >
-                            View Remark
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </main>
+    <div className="p-6 bg-gray-200 shadow-lg rounded-lg">
+      {/* Controls Section */}
+      <div className="flex flex-wrap gap-3 justify-start mb-4">
+        <select
+          className="bg-white text-gray-700 px-4 py-2 rounded-lg shadow-md border border-gray-300"
+          value={itemsPerPage}
+          onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
+        >
+          <option value={5}>View 5</option>
+          <option value={10}>View 10</option>
+          <option value={20}>View 20</option>
+          <option value={50}>View 50</option>
+        </select>
+        <button className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition-all duration-300">
+          Add New Job
+        </button>
+        <button className="bg-indigo-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-indigo-600 transition-all duration-300">
+          Report Date
+        </button>
+        <button className="bg-gray-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-500 transition-all duration-300">
+          From
+        </button>
+        <button className="bg-gray-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-500 transition-all duration-300">
+          To
+        </button>
+        <button className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-yellow-600 transition-all duration-300">
+          Filter
+        </button>
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300">
+          Search
+        </button>
+        <button className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all duration-300">
+          PDF/Excel Print
+        </button>
       </div>
-      {statusPopup.visible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
-            <h3 className="text-xl font-bold mb-4">Change Status</h3>
-            <select
-              className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-blue-500"
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-            >
-              <option value="">Select status</option>
-              <option value="Pending">pending</option>
-              <option value="In_Progress">In Progress</option>
-              <option value="Completed">Completed</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-            ;
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={cancelStatusChange}
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={saveStatusChange}
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      ,
-      {priorityPopup.visible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
-            <h3 className="text-xl font-bold mb-4">Change Priority</h3>
-            <select
-              className="w-full px-4 py-2 border rounded mb-4 focus:ring-2 focus:ring-blue-500"
-              value={selectedPriority}
-              onChange={(e) => setSelectedPriority(e.target.value)}
-            >
-              <option value="">Select Priority</option>
-              <option value="Urgent">Urgent</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
-            </select>
-            <div className="flex justify-end gap-4">
-              <button
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                onClick={cancelPriorityChange}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                onClick={savePriorityChange}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}{" "}
+
+      {/* Table Section */}
+      <div className="overflow-x-auto">
+        <table className="w-full border border-gray-300 rounded-lg shadow-md">
+          <thead className="bg-gray-300 text-gray-700">
+            <tr>
+              {[
+                "Job ID",
+                "Customer Name",
+                "Plate No",
+                "Repair Category",
+                "Received Date",
+                "Priority",
+                "Estimated Date",
+                "Promise Date",
+                "Status",
+                "Action",
+              ].map((header, index) => (
+                <th
+                  key={index}
+                  className="text-sm px-4 py-3 border text-left font-medium"
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {repairs.length === 0 ? (
+              <tr>
+                <td colSpan="10" className="text-center py-4 text-gray-500">
+                  Loading...
+                </td>
+              </tr>
+            ) : (
+              repairs.slice(0, itemsPerPage).map((repair) => (
+                <tr key={repair.id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-3">{repair.id}</td>
+                  <td className="px-4 py-3 font-medium">
+                    {repair.customer_name}
+                  </td>
+                  <td className="px-4 py-3">{repair.plate_no}</td>
+                  <td className="px-4 py-3">{repair.repair_category}</td>
+                  <td className="px-4 py-3">{repair.received_date}</td>
+                  <td
+                    className={`px-4 py-3 font-semibold ${
+                      repair.priority === "Urgent"
+                        ? "text-red-600"
+                        : repair.priority === "High"
+                        ? "text-orange-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    {repair.priority}
+                  </td>
+                  <td className="px-4 py-3">
+                    {repair.estimated_date || "N/A"}
+                  </td>
+                  <td className="px-4 py-3">{repair.promise_date || "N/A"}</td>
+                  <td className="px-4 py-3 font-semibold text-blue-600">
+                    {repair.condition}
+                  </td>
+                  <td className="px-4 py-3">
+                    <button className="bg-blue-600 text-white px-3 py-1 rounded">
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

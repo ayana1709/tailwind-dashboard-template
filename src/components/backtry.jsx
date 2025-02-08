@@ -83,39 +83,21 @@ const AddInspection = () => {
               {success && <div className="text-green-500 mb-4">{success}</div>}
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {Object.keys(formData).map((key) =>
-                    key === "customer_type" ? (
-                      <div key={key}>
-                        <label className="block font-medium text-gray-600 pb-2">
-                          CUSTOMER TYPE
-                        </label>
-                        <select
-                          name="customer_type"
-                          value={formData.customer_type}
-                          onChange={handleChange}
-                          className="w-full border p-2 rounded-md focus:border-blue-500 focus:ring-1"
-                        >
-                          <option value="">Select Customer Type</option>
-                          <option value="Regular">Regular</option>
-                          <option value="Contract">Contract</option>
-                        </select>
-                      </div>
-                    ) : (
-                      <div key={key}>
-                        <label className="block font-medium text-gray-600 pb-2">
-                          {key.replace("_", " ").toUpperCase()}
-                        </label>
-                        <input
-                          type="text"
-                          name={key}
-                          value={formData[key]}
-                          onChange={handleChange}
-                          placeholder={`Enter ${key.replace("_", " ")}`}
-                          className="w-full border p-2 rounded-md focus:border-blue-500 focus:ring-1"
-                        />
-                      </div>
-                    )
-                  )}
+                  {Object.keys(formData).map((key) => (
+                    <div key={key}>
+                      <label className="block font-medium text-gray-600 pb-2">
+                        {key.replace("_", " ").toUpperCase()}
+                      </label>
+                      <input
+                        type="text"
+                        name={key}
+                        value={formData[key]}
+                        onChange={handleChange}
+                        placeholder={`Enter ${key.replace("_", " ")}`}
+                        className="w-full border p-2 rounded-md focus:border-blue-500 focus:ring-1"
+                      />
+                    </div>
+                  ))}
                 </div>
                 <div className="text-center">
                   <button

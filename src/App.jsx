@@ -31,6 +31,7 @@ import InspectionList from "./components/InspectionList";
 import WheelAlignemntList from "./components/WheelAlignemntList";
 import VehicleDetails from "./components/VehicleDetails";
 import RepairRegistrationForm from "./components/RepairRegistrationForm";
+import JobManager from "./components/jobmanager";
 
 function App() {
   const location = useLocation();
@@ -59,7 +60,6 @@ function App() {
         <Route path="/list-of-Vehicle" element={<JobOrderList />} />
         {/* <Route path="/step-1" element={<VehicleRegistration />} /> */}
         <Route path="/step-1" element={<RepairRegistrationForm />} />
-
         <Route path="/vehicle-details" element={<VehicleDetails />} />
         {/* <Route path="/step-2" element={<TypeOfJob />} /> */}
         {/* <Route path="/edit-customer/:id" element={<EditCustomer />} /> */}
@@ -71,6 +71,14 @@ function App() {
         <Route path="/add-to-work-order" element={<AddToWorkOrder />} />
         <Route path="/work-order-list" element={<WorkOrderList />} />
         <Route path="/types-of-jobs" element={<TypesOfJobs />} />
+        <Route path="/job-manager" element={<JobManager />}>
+          {/* Default route for job-manager */}
+          <Route index element={<Navigate to="/job-manager/repair" />} />
+          <Route path="repair" element={<JobOrderList />} />
+          <Route path="bolo-list" element={<BoloList />} />
+          <Route path="inspection-list" element={<InspectionList />} />
+          <Route path="wheel-alignment-list" element={<WheelAlignemntList />} />
+        </Route>
         <Route path="/bolo" element={<AddBolo />} />
         <Route path="/bolo-list" element={<BoloList />} />
 
@@ -78,7 +86,7 @@ function App() {
         <Route path="/inspection-list" element={<InspectionList />} />
 
         <Route path="/wheel-alignment" element={<AddWheelAlignment />} />
-        <Route path="/wheel-alignment-list" element={<WheelAlignemntList />} />
+        {/* <Route path="/wheel-alignment-list" element={<WheelAlignemntList />} /> */}
       </Routes>
     </>
   );

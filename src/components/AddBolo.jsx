@@ -79,11 +79,17 @@ const AddBolo = () => {
               >
                 <div>
                   {[
-                    { label: "Job Card No", name: "job_card_no", type: "text" },
+                    {
+                      label: "Job Card No",
+                      name: "job_card_no",
+                      type: "text",
+                      placeholder: "የካርድ ቁጥር",
+                    },
                     {
                       label: "Customer Name",
                       name: "customer_name",
                       type: "text",
+                      placeholder: "የደንበኛው ስም",
                     },
                     {
                       label: "Customer Type",
@@ -132,6 +138,7 @@ const AddBolo = () => {
                         <input
                           type={field.type}
                           name={field.name}
+                          placeholder={field.placeholder}
                           value={formData[field.name]}
                           onChange={handleChange}
                           className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"

@@ -336,12 +336,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                               </span>
                             </NavLink>
                           </li>
-                          {/* Repair */}
                           <li className="mb-1 last:mb-0 relative">
                             <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-gray-300 dark:bg-gray-600"></span>
                             <NavLink
                               end
-                              to="/list-of-Vehicle"
+                              to="/job-manager"
                               className={({ isActive }) =>
                                 "block transition duration-150 truncate pl-4 " +
                                 (isActive
@@ -350,61 +349,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                               }
                             >
                               <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Repair
-                              </span>
-                            </NavLink>
-                          </li>
-                          {/* Bolo */}
-                          <li className="mb-1 last:mb-0 relative">
-                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-gray-300 dark:bg-gray-600"></span>
-                            <NavLink
-                              end
-                              to="/bolo-list"
-                              className={({ isActive }) =>
-                                "block transition duration-150 truncate pl-4 " +
-                                (isActive
-                                  ? "text-violet-500"
-                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Bolo
-                              </span>
-                            </NavLink>
-                          </li>
-                          {/* Wheel Alignment */}
-                          <li className="mb-1 last:mb-0 relative">
-                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-gray-300 dark:bg-gray-600"></span>
-                            <NavLink
-                              end
-                              to="/wheel-alignment-list"
-                              className={({ isActive }) =>
-                                "block transition duration-150 truncate pl-4 " +
-                                (isActive
-                                  ? "text-violet-500"
-                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Wheel Alignment
-                              </span>
-                            </NavLink>
-                          </li>
-                          {/* Inspection */}
-                          <li className="mb-1 last:mb-0 relative">
-                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-gray-300 dark:bg-gray-600"></span>
-                            <NavLink
-                              end
-                              to="/inspection-list"
-                              className={({ isActive }) =>
-                                "block transition duration-150 truncate pl-4 " +
-                                (isActive
-                                  ? "text-violet-500"
-                                  : "text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200")
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Inspection
+                                Job Manager
                               </span>
                             </NavLink>
                           </li>

@@ -1,152 +1,122 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../api";
-import Sidebar from "../partials/Sidebar";
-import Header from "../partials/Header";
-import LoadingSpinner from "./LoadingSpinner";
-import Loading from "./Loading";
 
 const InspectionList = () => {
-  const [inspection, setInspection] = useState([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const tableHeaders = [
-    "ID",
-    "Customer Name",
-    "Customer Type",
-    "phone number",
-    "Plate Number",
-    "Tin number",
-    "Result",
-    "Total Payment",
-    "Make",
-    "model",
-    "Year",
-    "Body Type",
-    "transmission",
-    "vehicle_conditions",
-  ];
-
-  const handleCreateJobCard = () => {
-    navigate("/inspection");
-  };
-
-  // if (loading) {
-  //   return <Loading />;
-  // }
+  const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
-    const fetchinspectionOrders = async () => {
+    const fetchJobs = async () => {
       try {
-        const response = await api.get("/inspection-list");
-        console.log("Fetched wheel orders:", response.data);
-        setInspection(response.data || []);
+        const response = await api.get("/job-orders");
+        setJobs(Array.isArray(response.data.data) ? response.data.data : []);
       } catch (error) {
-        console.error("Error fetching wheel orders:", error.message);
-        setError(error.message);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching jobs:", error);
+        setJobs([]);
       }
     };
 
-    fetchinspectionOrders();
+    fetchJobs();
   }, []);
 
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-red-500 text-lg font-semibold">{error}</div>
-      </div>
-    );
-  }
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="grow">
-          <div className="px-4 sm:px-6 lg:px-6 py-8 w-full max-w-9xl mx-auto">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold"> Inspection Job Orders</h2>
+    <div className="p-6 bg-white shadow-lg rounded-lg">
+      {/* Buttons Section */}
+      <div className="flex flex-wrap gap-3 justify-start mb-4">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300">
+          View 10
+        </button>
+        <button className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition-all duration-300">
+          Add New Job
+        </button>
+        <button className="bg-indigo-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-indigo-600 transition-all duration-300">
+          Report Date
+        </button>
+        <button className="bg-gray-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-500 transition-all duration-300">
+          From
+        </button>
+        <button className="bg-gray-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-500 transition-all duration-300">
+          To
+        </button>
+        <button className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-yellow-600 transition-all duration-300">
+          Filter
+        </button>
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300">
+          Search
+        </button>
+        <button className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all duration-300">
+          PDF/Excel Print
+        </button>
+      </div>
 
-                <div className="relative">
-                  <div className="flex items-center gap-4 ml-auto">
-                    <input
-                      type="text"
-                      className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Search..."
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                    />
-                    <button
-                      onClick={handleCreateJobCard}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                    >
-                      Create Job Card
+      {/* Table Section */}
+      <div className="overflow-x-auto">
+        <table className="w-full border border-gray-200 rounded-lg shadow-md">
+          <thead className="bg-gray-100 text-gray-700">
+            <tr>
+              {[
+                "#",
+                "Job ID",
+                "Customer Name",
+                "Plat No",
+                "Repair Type",
+                "Es.Date",
+                "Priority",
+                "Date Out",
+                "Promise Date",
+                "Status",
+                "Action",
+              ].map((header, index) => (
+                <th
+                  key={index}
+                  className="text-sm px-4 py-3 border text-left font-medium"
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {jobs.length === 0 ? (
+              <tr>
+                <td colSpan="11" className="text-center py-4 text-gray-500">
+                  Loading...
+                </td>
+              </tr>
+            ) : (
+              jobs.map((job, index) => (
+                <tr key={job.id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-3">{index + 1}</td>
+                  <td className="px-4 py-3">{job.id}</td>
+                  <td className="px-4 py-3 font-medium">{job.customer_name}</td>
+                  <td className="px-4 py-3">{job.plate_number}</td>
+                  <td className="px-4 py-3">{job.job_to_be_done}</td>
+                  <td className="px-4 py-3">{job.date_in}</td>
+                  <td
+                    className={`px-4 py-3 font-semibold ${
+                      job.priority === "Urgent"
+                        ? "text-red-600"
+                        : job.priority === "High"
+                        ? "text-orange-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    {job.job_order[0]}
+                  </td>
+                  <td className="px-4 py-3">{job.promised_date}</td>
+                  <td className="px-4 py-3">{job.promised_date}</td>
+                  <td className="px-4 py-3 font-semibold text-blue-600">
+                    {job.status}
+                  </td>
+                  <td className="px-4 py-3">
+                    <button className="bg-blue-600 text-white px-3 py-1 rounded">
+                      Edit
                     </button>
-                  </div>
-                </div>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse border border-gray-100 rounded-lg shadow">
-                  <thead className="bg-gray-400 text-black">
-                    <tr>
-                      {tableHeaders.map((header) => (
-                        <th
-                          key={header}
-                          className="py-3 px-4 border-b text-left"
-                        >
-                          {header}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {inspection.length > 0 ? (
-                      inspection.map((order, index) => (
-                        <tr key={order.id} className="hover:bg-gray-100">
-                          <td>{index + 1}</td>
-                          <td>{order.customer_name || "N/A"}</td>
-                          <td>{order.customer_type || "N/A"}</td>
-                          <td>{order.phone_number || "N/A"}</td>
-                          <td>{order.plate_number || "N/A"}</td>
-                          <td>{order.tin_number || "N/A"}</td>
-                          <td>{order.result || "N/A"}</td>
-                          <td>{order.payment_total || "N/A"}</td>
-                          {/* <td>{order.employee_id || "N/A"}</td> */}
-                          <td>{order.make || "N/A"}</td>
-                          <td>{order.model || "N/A"}</td>
-                          <td>{order.year || "N/A"}</td>
-                          <td>{order.body_type || "N/A"}</td>
-                          <td>{order.transmission || "N/A"}</td>
-                          <td>{order.vehicle_conditions || "N/A"}</td>]
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan={8}
-                          className="text-center py-4 text-gray-500"
-                        >
-                          No job orders found.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </main>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
