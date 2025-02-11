@@ -3,6 +3,8 @@ import api from "../api";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddInspection = () => {
   const { id } = useParams(); // Get ID from URL (for editing)
@@ -50,19 +52,31 @@ const AddInspection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    setSuccess(null);
 
     try {
       if (id) {
         await api.put(`/inspections/${id}`, formData);
-        setSuccess("Inspection updated successfully!");
+        toast.success("Inspection updated successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       } else {
         await api.post("/add-inspection", formData);
-        setSuccess("Vehicle registered successfully!");
+        toast.success("Vehicle registered successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
-      setTimeout(() => navigate("/inspection-list"), 2000);
+
+      setTimeout(() => navigate("/job-manager/inspection-list"), 1000);
     } catch (err) {
-      setError(err.response?.data?.message || "An unexpected error occurred.");
+      const errorMessage =
+        err.response?.data?.message || "An unexpected error occurred.";
+
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -76,33 +90,34 @@ const AddInspection = () => {
         <main className="grow">
           <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-6 text-center">
+              <h2 className="text-2xl font-bold mb-6 text-center text-blue-500">
                 {id ? "Update Inspection" : "Inspection Registration"}
               </h2>
               {error && <div className="text-red-500 mb-4">{error}</div>}
               {success && <div className="text-green-500 mb-4">{success}</div>}
               <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 border px-4 py-6 rounded-md">
+                  {/* <div className="absolute w-[2px] h-full bg-gray-300 left-1/2 -translate-x-1/2"></div> */}
                   {Object.keys(formData).map((key) =>
                     key === "customer_type" ? (
-                      <div key={key}>
-                        <label className="block font-medium text-gray-600 pb-2">
+                      <div key={key} className="">
+                        <label className="block font-medium text-gray-600 pb-[2px] text-sm">
                           CUSTOMER TYPE
                         </label>
                         <select
                           name="customer_type"
                           value={formData.customer_type}
                           onChange={handleChange}
-                          className="w-full border p-2 rounded-md focus:border-blue-500 focus:ring-1"
+                          className="w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
                         >
-                          <option value="">Select Customer Type</option>
-                          <option value="Regular">Regular</option>
-                          <option value="Contract">Contract</option>
+                          <option value="">የተከታታይነት አይነት ምረጥ</option>
+                          <option value="Regular">ተመን ሰለባ</option>
+                          <option value="Contract">ውል</option>
                         </select>
                       </div>
                     ) : (
                       <div key={key}>
-                        <label className="block font-medium text-gray-600 pb-2">
+                        <label className="block font-medium text-gray-600 pb-[2px] text-sm">
                           {key.replace("_", " ").toUpperCase()}
                         </label>
                         <input
@@ -110,17 +125,39 @@ const AddInspection = () => {
                           name={key}
                           value={formData[key]}
                           onChange={handleChange}
-                          placeholder={`Enter ${key.replace("_", " ")}`}
-                          className="w-full border p-2 rounded-md focus:border-blue-500 focus:ring-1"
+                          placeholder={
+                            key === "customer_name"
+                              ? "የደንበኛ ስምን በተለይ እባኮት"
+                              : key === "phone_number"
+                              ? "ስልኩን ቁጥር"
+                              : key === "tin_number"
+                              ? "ታዋቂ ቁጥር"
+                              : key === "result"
+                              ? "ምን ውጤት"
+                              : key === "total_payment"
+                              ? "አጠቃቀም ክፍያ"
+                              : key === "checked_by"
+                              ? "ምልክት በማኅበረሰብ"
+                              : key === "plate_number"
+                              ? "ተሽከርካሪ ቁጥር"
+                              : key === "make"
+                              ? "ባለሞያ እባኮት"
+                              : key === "model"
+                              ? "ሞዴል"
+                              : key === "year"
+                              ? "ዓመት"
+                              : "ተጨማሪ እባኮት"
+                          }
+                          className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
                         />
                       </div>
                     )
                   )}
                 </div>
-                <div className="text-center">
+                <div className="flex justify-center">
                   <button
                     type="submit"
-                    className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-2 rounded-md mt-6 transition duration-300 shadow-md"
+                    className="w-[50%] bg-blue-600 hover:shadow-lg focus:shadow-sm hover:bg-blue-800 text-white px-6 py-2 rounded-md mt-6 transition duration-300"
                   >
                     {id ? "Update" : "Submit"}
                   </button>

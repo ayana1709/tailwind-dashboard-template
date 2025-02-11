@@ -199,7 +199,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                 }}
               </SidebarLinkGroup>
               {/* Customer */}
-              <SidebarLinkGroup
+              {/* <SidebarLinkGroup
                 activecondition={pathname.includes("ecommerce")}
               >
                 {(handleClick, open) => {
@@ -261,7 +261,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
                     </React.Fragment>
                   );
                 }}
-              </SidebarLinkGroup>
+              </SidebarLinkGroup> */}
 
               {/* Job Order  */}
               <SidebarLinkGroup

@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
 import api from "../api";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function RepairRegistrationForm() {
+export default function EditRepair() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [vehicles, setVehicles] = useState([
     {
@@ -34,25 +32,59 @@ export default function RepairRegistrationForm() {
     received_by: "",
   });
 
-  const addVehicle = () => {
-    setVehicles([
-      ...vehicles,
-      {
-        plate_no: "",
-        model: "",
-        vin: "",
-        year: "",
-        condition: "",
-        km_reading: "",
-        estimated_price: "",
-      },
-    ]);
-  };
-
+  const { id } = useParams(); // Assuming you're using React Router v6 and the ID is part of the URL
   const navigate = useNavigate();
-  const removeVehicle = (index) => {
-    setVehicles(vehicles.filter((_, i) => i !== index));
-  };
+
+  useEffect(() => {
+    const fetchRepairData = async () => {
+      try {
+        const response = await api.get(`/repairs/${id}`);
+        console.log("Fetched Data:", response.data); // Log response
+
+        const data = response.data;
+
+        if (!data) {
+          throw new Error("No data received");
+        }
+
+        setFormData({
+          customer_name: data.customer_name || "",
+          customer_type: data.customer_type || "",
+          mobile: data.mobile || "",
+          received_date: data.received_date || "",
+          estimated_date: data.estimated_date || "",
+          promise_date: data.promise_date || "",
+          priority: data.priority || "",
+          repair_category: data.repair_category
+            ? data.repair_category.split(", ")
+            : [],
+          customer_observations: data.customer_observations || "",
+          spare_change: data.spare_change || "",
+          received_by: data.received_by || "",
+        });
+
+        setVehicles([
+          {
+            plate_no: data.plate_no || "",
+            model: data.model || "",
+            tin: data.tin || "",
+            year: data.year || "",
+            condition: data.condition || "",
+            km_reading: data.km_reading || "",
+            estimated_price: data.estimated_price || "",
+          },
+        ]);
+      } catch (error) {
+        console.error(
+          "Error fetching repair data:",
+          error.response || error.message
+        );
+        alert("Failed to load repair data.");
+      }
+    };
+
+    fetchRepairData();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -79,38 +111,38 @@ export default function RepairRegistrationForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Check if repair_category is an empty array
+      if (formData.repair_category.length === 0) {
+        alert("Please select at least one repair category.");
+        return;
+      }
+
       const payload = {
         ...formData,
         repair_category: formData.repair_category.join(", "), // Convert array to string
         ...vehicles[0], // Assuming one vehicle for now (adjust if needed)
       };
 
-      const response = await api.post("/repairs", payload, {
+      const response = await api.put(`/repairs/${id}`, payload, {
         headers: { "Content-Type": "application/json" },
       });
 
-      toast.success(response.data.message, {
-        position: "top-right",
-        autoClose: 3000,
-      });
-
+      alert(response.data.message);
       setTimeout(() => navigate("/job-manager/repair"), 1000);
     } catch (error) {
       console.error("Error submitting form", error);
-      toast.error("Failed to submit form.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      alert("Failed to submit form.");
     }
   };
 
   const placeholders = {
-    plate_no: "የተሽከርካሪ መታወቂያ ቁጥር",
-    model: "የተሽከርካሪ ሞዴል",
-    tin: "የግብር መለያ ቁጥር",
-    year: "የምርት አመት",
-    km_reading: "የተሽከርካሪ ኪ.ሜ አንቀሳቃሴ",
-    estimated_price: "የተገመተ የተሽከርካሪ ዋጋ",
+    plate_no: "plate_no",
+    model: "model",
+    tin: "tin",
+    year: "year",
+    condition: "condition",
+    km_reading: "km_reading",
+    estimated_price: "estimated_price",
   };
 
   return (
@@ -125,7 +157,9 @@ export default function RepairRegistrationForm() {
             onSubmit={handleSubmit}
             className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg"
           >
-            <h2 className="text-xl font-bold mb-4">Repair Registration Form</h2>
+            <h2 className="text-xl font-bold mb-4">
+              Edit Repair Registration Form
+            </h2>
 
             <div className="grid grid-cols-2 gap-6">
               {/* Customer Details */}
@@ -139,6 +173,7 @@ export default function RepairRegistrationForm() {
                     <input
                       type="text"
                       name="customer_name"
+                      value={formData.customer_name}
                       onChange={handleChange}
                       placeholder="የደንበኛው ስም"
                       className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
@@ -149,8 +184,8 @@ export default function RepairRegistrationForm() {
                     <label>Customer Type</label>
                     <select
                       name="customer_type"
+                      value={formData.customer_type}
                       onChange={handleChange}
-                      placeholder="የደንበኛው አይነት"
                       className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
                       required
                     >
@@ -164,6 +199,7 @@ export default function RepairRegistrationForm() {
                     <input
                       type="text"
                       name="mobile"
+                      value={formData.mobile}
                       onChange={handleChange}
                       placeholder="ስልክ ቁጥር"
                       className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
@@ -175,6 +211,7 @@ export default function RepairRegistrationForm() {
                     <input
                       type="date"
                       name="received_date"
+                      value={formData.received_date}
                       onChange={handleChange}
                       className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
                       required
@@ -185,15 +222,17 @@ export default function RepairRegistrationForm() {
                     <input
                       type="date"
                       name="estimated_date"
+                      value={formData.estimated_date}
                       onChange={handleChange}
                       className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
                     />
                   </div>
                   <div>
-                    <label> Date Out/የምያልቅበት ቀን</label>
+                    <label>Promise Date/የምያልቅበት ቀን</label>
                     <input
                       type="date"
                       name="promise_date"
+                      value={formData.promise_date}
                       onChange={handleChange}
                       className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
                     />
@@ -202,11 +241,12 @@ export default function RepairRegistrationForm() {
                     <label>Priority</label>
                     <select
                       name="priority"
+                      value={formData.priority}
                       onChange={handleChange}
                       className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
                       required
                     >
-                      <option value="">ቅድምያው የሚሰጠዉን ምረጥ</option>
+                      <option value="">Select Priority</option>
                       <option value="Urgent">Urgent</option>
                       <option value="High">High</option>
                       <option value="Medium">Medium</option>
@@ -217,59 +257,57 @@ export default function RepairRegistrationForm() {
                     <label className="mb-2 block text-gray-700 font-semibold">
                       Repair Category
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {[
-                        "General Service",
-                        "Body",
-                        "Mechanical",
-                        "Electrical",
-                        "Diagnostic",
-                      ].map((category) => (
-                        <label key={category}>
-                          <input
-                            type="checkbox"
-                            name="repair_category"
-                            value={category}
-                            onChange={handleChange}
-                            className="ring-0 focus:ring-0"
-                          />{" "}
-                          {category}
-                        </label>
-                      ))}
+                    <div className="flex flex-wrap gap-2">
+                      {["Electrical", "Mechanical", "Cosmetic"].map(
+                        (category) => (
+                          <label
+                            key={category}
+                            className="flex items-center space-x-2"
+                          >
+                            <input
+                              type="checkbox"
+                              name="repair_category"
+                              value={category}
+                              checked={formData.repair_category.includes(
+                                category
+                              )}
+                              onChange={handleChange}
+                            />
+                            <span>{category}</span>
+                          </label>
+                        )
+                      )}
                     </div>
                   </div>
-                </div>
-                {/* Customer Observations, Spare Change, and Received By - Vertically Aligned */}
-                <div className="flex flex-col gap-4 mt-6">
-                  <div className="p-4 border rounded-lg hover:shadow-md hover:border-blue-500 transition-all duration-300">
-                    <h3 className="font-semibold mb-2">
-                      Customer Observations
-                    </h3>
+                  <div>
+                    <label>Customer Observations</label>
                     <textarea
-                      type="text"
                       name="customer_observations"
+                      value={formData.customer_observations}
                       onChange={handleChange}
-                      placeholder="የባለሙያ አይታ"
-                      className="w-full border border-gray-300 p-2 rounded h-20"
-                    ></textarea>
+                      placeholder="የደንበኛ እትም"
+                      className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    />
                   </div>
-                  <div className="p-4 border rounded-lg hover:shadow-md hover:border-blue-500 transition-all duration-300">
-                    <h3 className="font-semibold mb-2">Spare Change</h3>
-                    <textarea
+                  <div>
+                    <label>Spare Change</label>
+                    <input
                       type="text"
                       name="spare_change"
+                      value={formData.spare_change}
                       onChange={handleChange}
-                      placeholder="የመለዋወጫ መቀየሪያ"
-                      className="w-full border border-gray-300 p-2 rounded h-20"
-                    ></textarea>
+                      placeholder="ማህተም"
+                      className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                    />
                   </div>
-                  <div className="p-4 border rounded-lg hover:shadow-md hover:border-blue-500 transition-all duration-300">
-                    <h3 className="font-semibold mb-2">Received By</h3>
+                  <div>
+                    <label>Received By</label>
                     <input
                       type="text"
                       name="received_by"
+                      value={formData.received_by}
                       onChange={handleChange}
-                      placeholder="የተቀባይ ስም"
+                      placeholder="የተቀበሉት ተቀባይ"
                       className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
                     />
                   </div>
@@ -277,80 +315,43 @@ export default function RepairRegistrationForm() {
               </div>
 
               {/* Vehicle Details */}
-              <div className="col-span-1 text-right px-4 py-2 border rounded-md">
-                <h3 className="font-semibold mb-2 text-blue-700">
+              <div className="col-span-1 border px-4 py-2 rounded-md">
+                <h3 className="font-semibold mb-4 text-blue-700">
                   Vehicle Details
                 </h3>
-                <button
-                  type="button"
-                  onClick={addVehicle}
-                  className="w-full bg-blue-500 text-white p-2 rounded"
-                >
-                  Add Vehicle +
-                </button>
-
-                {vehicles.map((vehicle, index) => (
-                  <div
-                    key={index}
-                    className="mt-4 p-4 border hover:border-blue-500 rounded-lg relative inline-block text-left flex flex-col gap-2 transition-all duration-500"
-                  >
-                    <h4 className="font-semibold">Vehicle {index + 1}</h4>
-                    {index > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => removeVehicle(index)}
-                        className="absolute top-2 right-2 text-red-500"
-                      >
-                        ✖
-                      </button>
-                    )}
-                    {[
-                      "plate_no",
-                      "model",
-                      "tin",
-                      "year",
-                      "km_reading",
-                      "estimated_price",
-                    ].map((field) => (
-                      <div key={field}>
-                        <div>
-                          <label>{field.replace("_", " ").toUpperCase()}</label>
-                          <input
-                            type="text"
-                            name={field}
-                            value={vehicle[field]}
-                            placeholder={placeholders[field]} // Amharic Placeholder
-                            onChange={(e) => handleVehicleChange(index, e)}
-                            className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
-                          />
-                        </div>
-                      </div>
-                    ))}
-
-                    <label>Condition</label>
-                    <select
-                      name="condition"
-                      value={vehicle.condition}
-                      onChange={(e) => handleVehicleChange(index, e)}
-                      className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
-                    >
-                      <option value="">የመኪናዉን ሁኔታ ምረጥ</option>
-                      <option value="New">New</option>
-                      <option value="Used">Used</option>
-                      <option value="Average">Average</option>
-                      <option value="Damage">Damage</option>
-                    </select>
-                  </div>
-                ))}
+                <div className="flex flex-col gap-4">
+                  {Object.entries(vehicles[0]).map(([key, value]) => (
+                    <div key={key}>
+                      <label>{placeholders[key]}</label>
+                      <input
+                        type="text"
+                        name={key}
+                        value={value}
+                        onChange={(e) => handleVehicleChange(0, e)}
+                        placeholder={placeholders[key]}
+                        className="placeholder:text-sm w-full border border-gray-300 p-2 rounded-md focus:border-blue-500 focus:ring-1 transition duration-200"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="mt-6 bg-blue-600 hover:bg-blue-700 text-white p-2 w-full hover:shadow-lg focus:shadow-sm rounded transition-all duration-500"
-            >
-              Submit
-            </button>
+            <div className="mt-6 flex justify-end space-x-4">
+              <button
+                type="button"
+                onClick={() => navigate("/job-manager/repair")}
+                className="bg-gray-300 text-gray-800 py-2 px-6 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-blue-600 text-white py-2 px-6 rounded-md"
+              >
+                Save Changes
+              </button>
+            </div>
           </form>
         </main>
       </div>

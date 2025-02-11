@@ -3,6 +3,9 @@ import axios from "axios";
 import api from "../api";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
+import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EmployeeRegistration = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +16,7 @@ const EmployeeRegistration = () => {
     gender: "",
   });
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,7 +26,7 @@ const EmployeeRegistration = () => {
     e.preventDefault();
     try {
       const response = await api.post("/employees", formData);
-      alert("Employee registered successfully!");
+
       setFormData({
         full_name: "",
         contact_information: "",
@@ -30,9 +34,17 @@ const EmployeeRegistration = () => {
         address: "",
         gender: "",
       });
+      toast.success(response.data.message, {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      setTimeout(() => navigate("/employees-list"), 2000);
     } catch (error) {
       console.error(error.response.data);
-      alert("Error registering employee.");
+      toast.error("Failed to submit form.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 

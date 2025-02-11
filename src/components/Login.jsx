@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-// import axios from "axios";
 import api from "../api";
-import logo from "./../images/lg.png";
+import logo from "./../images/aa.png";
+
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  // Change email to username
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +14,10 @@ const Login = ({ onLogin }) => {
     setIsLoading(true);
 
     try {
-      const response = await api.post("/admin/login", { username, password }); // Update key to username
+      const response = await api.post("/admin/login", {
+        username,
+        password,
+      });
       localStorage.setItem("adminToken", response.data.token);
       onLogin(response.data.admin);
     } catch (err) {
@@ -33,103 +34,89 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 p-4">
-      {/* Card Container */}
-      <div className="w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden">
-        {/* Logo and Header */}
-        <div className="text-center p-6 bg-gradient-to-r from-gray-600 to-gray-600 text-white">
-          <img
-            src={logo}
-            alt="Logo"
-            className="w-24 h-24 mx-auto mb-4 object-cover rounded-full border-4 border-white"
-          />
-          <h1 className="text-3xl font-extrabold">Speed Meter Trading Plc</h1>
-          <p className="text-sm font-medium">ስፒድ ሜትር ትሬዲንግ ኃላ የተ የግ ማህበር</p>
-        </div>
-
-        {/* Login Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 bg-gray-50">
-          <h2 className="text-2xl font-bold text-gray-800 text-center">
-            Welcome Back
-          </h2>
-          {error && (
-            <p className="text-red-600 text-center font-medium">{error}</p>
-          )}
-
-          {/* Username Field */}
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-gray-700 font-semibold"
-            >
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              placeholder="Enter your username"
-              className="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              value={username} // Change 'email' to 'username'
-              onChange={(e) => setUsername(e.target.value)} // Change to setUsername
-              required
-            />
+    <div className="h-screen bg-gray-900 p-4">
+      <div className="relative h-full w-[95%] mx-auto flex gap-8 bg-gray-800 px-4 py-4 rounded-md bg-car-image bg-gradient-bg bg-cover bg-center">
+        {/* <div className="w-[50%] overflow-hidden bg-car-image bg-gradient-bg bg-cover bg-center rounded-md"></div> */}
+        <div className="absolute right-[25%] translate-x-1/2 w-full max-w-md overflow-hidden">
+          <div className="text-center p-6 text-white">
+            <img src={logo} />
           </div>
 
-          {/* Password Field */}
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-semibold"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              className="w-full mt-2 p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Login Button */}
-          <button
-            type="submit"
-            className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <svg
-                className="w-5 h-5 animate-spin"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                ></path>
-              </svg>
-            ) : (
-              "Login"
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            {error && (
+              <p className="text-red-500 text-center font-medium">{error}</p>
             )}
-          </button>
-        </form>
 
-        {/* Footer */}
-        <div className="p-4 bg-gray-100 text-center text-gray-600 text-sm">
-          © 2024 Speed Meter Trading Plc. All rights reserved.
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-gray-300 font-medium"
+              >
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                placeholder="Enter your username"
+                className="placeholder:text-gray-300 w-full mt-2 p-3 border-2 border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-0 outline-none focus:outline-none focus:border-gray-200 transition-all duration-500"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-gray-300 font-medium"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                className="placeholder:text-gray-300 w-full mt-2 p-3 rounded-lg bg-gray-600 border-2 border-gray-700 bg-gray-900 text-white focus:ring-0 focus:outline-none outline-none focus:border-gray-200 transition-all duration-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 bg-cyan-900 hover:bg-cyan-800 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center transition-all duration-300"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <svg
+                  className="w-5 h-5 animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  ></path>
+                </svg>
+              ) : (
+                "Login"
+              )}
+            </button>
+            <div className="flex justify-center py-4 inline-block bg-gray-900 text-left text-gray-300 text-sm rounded-md">
+              <p>© 2025 Speed Meter Trading Plc. All rights reserved.</p>
+            </div>
+          </form>
         </div>
       </div>
     </div>

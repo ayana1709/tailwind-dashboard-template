@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
 import Loading from "./Loading";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddWheelAlignment = () => {
   const [formData, setFormData] = useState({
@@ -41,15 +43,26 @@ const AddWheelAlignment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
     setLoading(true);
+    setError(null);
+
     try {
       await api.post("/wheel-alignment", formData);
-      setSuccess("Job card added successfully!");
+
+      toast.success("Job card added successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
       setTimeout(() => navigate("/job-card-list"), 2000);
     } catch (err) {
-      setError(err.response?.data?.message || "An unexpected error occurred.");
+      const errorMessage =
+        err.response?.data?.message || "An unexpected error occurred.";
+
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } finally {
       setLoading(false);
     }

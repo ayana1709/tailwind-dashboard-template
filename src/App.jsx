@@ -32,6 +32,10 @@ import WheelAlignemntList from "./components/WheelAlignemntList";
 import VehicleDetails from "./components/VehicleDetails";
 import RepairRegistrationForm from "./components/RepairRegistrationForm";
 import JobManager from "./components/jobmanager";
+import ViewRepair from "./components/ViewRepair";
+import EditRepairRegistrationForm from "./components/EditRepair";
+import EditRepair from "./components/EditRepair";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const location = useLocation();
@@ -45,6 +49,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer />
       <Routes>
         <Route
           exact
@@ -68,7 +73,8 @@ function App() {
 
         <Route path="/employees" element={<EmployeeRegistration />} />
         <Route path="/employees-list" element={<EmployeeList />} />
-        <Route path="/add-to-work-order" element={<AddToWorkOrder />} />
+        <Route path="/add-to-work-order/:id" element={<AddToWorkOrder />} />
+
         <Route path="/work-order-list" element={<WorkOrderList />} />
         <Route path="/types-of-jobs" element={<TypesOfJobs />} />
         <Route path="/job-manager" element={<JobManager />}>
@@ -85,7 +91,11 @@ function App() {
         <Route path="/inspection" element={<AddInspection />} />
         <Route path="/inspection-list" element={<InspectionList />} />
 
+        <Route path="/edit-repair/:id" element={<EditRepair />} />
+        <Route path="/viewrepair/:id" element={<ViewRepair />} />
+
         <Route path="/wheel-alignment" element={<AddWheelAlignment />} />
+
         {/* <Route path="/wheel-alignment-list" element={<WheelAlignemntList />} /> */}
       </Routes>
     </>

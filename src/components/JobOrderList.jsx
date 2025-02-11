@@ -1,9 +1,29 @@
 import React, { useState, useEffect } from "react";
+import { FiSearch } from "react-icons/fi";
+import { FiChevronDown } from "react-icons/fi";
 import api from "../api";
+import { Navigate, useNavigate } from "react-router-dom";
+
+import ButtonOperation from "./ButtonOperation";
 
 const JobOrderList = () => {
   const [repairs, setRepairs] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const headers = [
+    "Job ID",
+    "Customer Name",
+    "Plate No",
+    "Repair Category",
+    "Received Date",
+    "Estimated Date",
+    "Priority",
+  ];
+  console.log(repairs);
 
   useEffect(() => {
     const fetchRepairs = async () => {
@@ -15,51 +35,114 @@ const JobOrderList = () => {
         setRepairs([]);
       }
     };
-
     fetchRepairs();
   }, []);
 
+  const toggleDropdown = (id) => {
+    setDropdownOpen(dropdownOpen === id ? null : id);
+  };
+
+  const handleFilter = () => {
+    let filteredRepairs = repairs;
+    if (startDate && endDate) {
+      filteredRepairs = filteredRepairs.filter((repair) => {
+        const repairDate = new Date(repair.received_date);
+        return (
+          repairDate >= new Date(startDate) && repairDate <= new Date(endDate)
+        );
+      });
+    }
+    if (searchTerm) {
+      filteredRepairs = filteredRepairs.filter((repair) =>
+        repair.customer_name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    return filteredRepairs;
+  };
+
+  const filteredRepairs = handleFilter();
+  const totalPages = Math.ceil(filteredRepairs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const displayedRepairs = filteredRepairs.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const navigate = useNavigate();
+  const handleNavigation = (option, id) => {
+    const routes = {
+      View: `/viewrepair/${id}`,
+      Edit: `/edit-repair/${id}`,
+      Delete: `/delete/${id}`,
+      "Add to Work": `/add-to-work-order/${id}`,
+      "Change Status": `/change-status/${id}`,
+      "Print Summary": `/print-summary/${id}`,
+      "Work Progress": `/work-progress/${id}`,
+      "Request Spare": `/request-spare/${id}`,
+    };
+
+    if (routes[option]) {
+      navigate(routes[option]);
+    }
+  };
+
   return (
-    <div className="p-6 bg-gray-200 shadow-lg rounded-lg">
-      {/* Controls Section */}
+    <div className="p-6 bg-white shadow-lg rounded-lg">
       <div className="flex flex-wrap gap-3 justify-start mb-4">
         <select
-          className="bg-white text-gray-700 px-4 py-2 rounded-lg shadow-md border border-gray-300"
+          className="bg-white text-gray-700 px-2 py-2 rounded-lg shadow-md border border-gray-300"
           value={itemsPerPage}
           onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
         >
-          <option value={5}>View 5</option>
-          <option value={10}>View 10</option>
-          <option value={20}>View 20</option>
-          <option value={50}>View 50</option>
+          {[5, 10, 20, 50].map((num) => (
+            <option key={num} value={num}>
+              View {num}
+            </option>
+          ))}
         </select>
-        <button className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition-all duration-300">
+        <button
+          onClick={() => navigate("/step-1")}
+          className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600"
+        >
           Add New Job
         </button>
-        <button className="bg-indigo-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-indigo-600 transition-all duration-300">
-          Report Date
-        </button>
-        <button className="bg-gray-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-500 transition-all duration-300">
-          From
-        </button>
-        <button className="bg-gray-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-500 transition-all duration-300">
-          To
-        </button>
-        <button className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-yellow-600 transition-all duration-300">
+        <input
+          type="date"
+          className="border rounded-lg px-2 py-2 shadow-md"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <input
+          type="date"
+          className="border rounded-lg px-2 py-2 shadow-md"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+        <button
+          onClick={handleFilter}
+          className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-yellow-600"
+        >
           Filter
         </button>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300">
-          Search
-        </button>
-        <button className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all duration-300">
-          PDF/Excel Print
-        </button>
+        <div className="flex items-center bg-gray-200 px-3 py-2 rounded-lg shadow-md">
+          <FiSearch className="text-gray-600" />
+          <input
+            type="text"
+            className="bg-transparent border-none focus:outline-none ml-2"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <ButtonOperation
+          headers={headers}
+          displayedRepairs={displayedRepairs}
+        />
       </div>
 
-      {/* Table Section */}
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-300 rounded-lg shadow-md">
-          <thead className="bg-gray-300 text-gray-700">
+          <thead className="bg-gray-300 text-gray-700 text-xs">
             <tr>
               {[
                 "Job ID",
@@ -67,10 +150,10 @@ const JobOrderList = () => {
                 "Plate No",
                 "Repair Category",
                 "Received Date",
-                "Priority",
                 "Estimated Date",
-                "Promise Date",
-                "Status",
+                "Date Out",
+                "Priority",
+                " Car Status",
                 "Action",
               ].map((header, index) => (
                 <th
@@ -83,15 +166,15 @@ const JobOrderList = () => {
             </tr>
           </thead>
           <tbody>
-            {repairs.length === 0 ? (
+            {displayedRepairs.length === 0 ? (
               <tr>
                 <td colSpan="10" className="text-center py-4 text-gray-500">
-                  Loading...
+                  No data available
                 </td>
               </tr>
             ) : (
-              repairs.slice(0, itemsPerPage).map((repair) => (
-                <tr key={repair.id} className="border-b hover:bg-gray-50">
+              displayedRepairs.map((repair) => (
+                <tr key={repair.id} className="border-b hover:bg-gray-200">
                   <td className="px-4 py-3">{repair.id}</td>
                   <td className="px-4 py-3 font-medium">
                     {repair.customer_name}
@@ -99,6 +182,11 @@ const JobOrderList = () => {
                   <td className="px-4 py-3">{repair.plate_no}</td>
                   <td className="px-4 py-3">{repair.repair_category}</td>
                   <td className="px-4 py-3">{repair.received_date}</td>
+
+                  <td className="px-4 py-3">
+                    {repair.estimated_date || "N/A"}
+                  </td>
+                  <td className="px-4 py-3">{repair.promise_datedate || ""}</td>
                   <td
                     className={`px-4 py-3 font-semibold ${
                       repair.priority === "Urgent"
@@ -110,23 +198,75 @@ const JobOrderList = () => {
                   >
                     {repair.priority}
                   </td>
-                  <td className="px-4 py-3">
-                    {repair.estimated_date || "N/A"}
-                  </td>
-                  <td className="px-4 py-3">{repair.promise_date || "N/A"}</td>
                   <td className="px-4 py-3 font-semibold text-blue-600">
                     {repair.condition}
                   </td>
-                  <td className="px-4 py-3">
-                    <button className="bg-blue-600 text-white px-3 py-1 rounded">
-                      Edit
+
+                  <td className="px-4 py-3 relative">
+                    <button
+                      onClick={() => toggleDropdown(repair.id)}
+                      className="bg-blue-600 text-white px-3 py-1 rounded flex items-center"
+                    >
+                      Action <FiChevronDown className="ml-2" />
                     </button>
+                    {dropdownOpen === repair.id && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10">
+                        {[
+                          "View",
+                          "Edit",
+                          "Delete",
+                          "Add to Work",
+                          "Change Status",
+                          "Print Summary",
+                          "Work Progress",
+                          "Request Spare",
+                        ].map((option, index) => (
+                          <button
+                            key={index}
+                            className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-200"
+                            onClick={() => handleNavigation(option, repair.id)}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex justify-between items-center mt-4">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          className={`px-4 py-2 bg-gray-300 text-gray-700 rounded ${
+            currentPage === 1
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-gray-400"
+          }`}
+        >
+          Previous
+        </button>
+        <span className="text-gray-700">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          className={`px-4 py-2 bg-gray-300 text-gray-700 rounded ${
+            currentPage === totalPages
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-gray-400"
+          }`}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
