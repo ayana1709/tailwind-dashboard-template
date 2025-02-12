@@ -8,6 +8,7 @@
     <script>
       if (localStorage.theme === "dark" || !("theme" in localStorage)) {
         document.querySelector("html").classList.add("dark");
+
         document.querySelector("html").style.colorScheme = "dark";
       } else {
         document.querySelector("html").classList.remove("dark");
