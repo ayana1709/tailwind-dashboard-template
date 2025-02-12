@@ -1,6 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
+  // baseURL: "https://speedmeter.rekikartgallery.com/api/",
+  // baseURL: "https://gwg.rekikartgallery.com/api/",
   baseURL: "http://127.0.0.1:8000/api/",
   // baseURL: "https://speedmetergms.com/api/",
 });
